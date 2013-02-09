@@ -1,0 +1,110 @@
+.dp-box {
+    float: left;
+    margin: 10px;
+    width: 420px;
+    padding: 2px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    box-shadow: 3px 3px 3px #ddd;
+
+    font-family: verdana;
+}
+
+
+.dp-wdays,
+.dp {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    list-style: none;
+    border: 1px solid #999;
+    border-width: 1px 0 0 1px;
+}
+
+.dp-year {
+    width: 100%;
+    padding: 5px 0;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.dp-wdays {
+    border-width: 1px 0 0 1px;
+    box-sizing: border-box;
+}
+
+.dp-wdays span,
+.dp li {
+    float: left;
+    width: 14.286%;
+}
+
+.dp li a {
+    position: relative;
+
+    display: inline-block;
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 100%;
+
+    border: 1px solid #999;
+    border-width: 0 1px 1px 0;
+
+    line-height: 60px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.dp li a.dp-selectable:hover {
+    background: #00A1DE;
+    color: #fff;
+}
+
+.dp li a.dp-selectable {
+    color: #00A1DE;
+}
+
+.dp li a.dp-disabled:hover {
+    background: #fff;
+    color: #999;
+}
+
+.dp-wdays span {
+    box-sizing: border-box;
+    border-right: 1px solid #999;
+
+    line-height: 30px;
+    text-align: center;
+    background: #eee;
+}
+
+.dp li a:hover .dp-month,
+.dp-month {
+    position: absolute;
+    width: 100%;
+
+    top: 0;
+    left: 0;
+
+    background: #dbdbdb;
+    box-sizing: border-box;
+    border-bottom: 1px solid #999;
+
+    padding: 0 0 2px 6px;
+
+    color: #003145;
+    font-size: 0.7em;
+    text-align: left;
+    line-height: 1.2em;
+}
+
+.dp-disabled {
+    color: #999;
+    cursor: default;
+}

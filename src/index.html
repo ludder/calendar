@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>datepicker</title>
+        <link rel="stylesheet" href="css/sb-datepicker.css" />
+        <style>
+            p { 
+                overflow: hidden;
+            }
+            #datepicker {
+                float: left;
+            }
+
+            body {
+                color: #003145;
+            }
+        </style>
+    </head>
+    <body>
+        <p>
+            <input id="date" value="2013, 1, 12" />
+            <input id="range" value="3" />
+            <div id="result"></div>
+            <button id="showcal" type="submit">render calendar</button>
+        </p>
+        <div id="datepicker" class="dp-box"></div>
+
+
+        <script src="lib/require.js"></script>
+        <script>
+
+
+            var button = document.querySelector('#showcal'),
+                dateInput = document.querySelector('#date'),
+                rangeInput = document.querySelector('#range');
+            
+
+            function handleChange(e) {
+                var date = dateInput.value,
+                    range = rangeInput.value;
+
+                var iDate = new Date(date);
+
+                // create datepicker configured by input fields
+                require(['js/sb-datepicker.js'], function ($dp) {
+                    $dp.init({
+                        startDate   : iDate,
+                        range       : range,
+                        containerId : 'datepicker',
+                        resultId    : 'result'
+                    });
+                });
+
+
+            }
+
+            button.addEventListener('click', handleChange, false);
+
+
+        </script>
+    </body>
+</html>
