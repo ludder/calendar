@@ -5,12 +5,22 @@
 	<title>QUnit Test Suite</title>
 	<link rel="stylesheet" href="../qunit/qunit.css">
 	<script src="../qunit/qunit.js"></script>
-	<script src="../../src/js/sb-datepicker.model.js"></script>
-	<script src="../../src/js/sb-datepicker.view.js"></script>
+	<script src="../../src/lib/require.js"></script>
+    <script>
+        require.config({
+            paths : {
+                "js" : "../../src/js",
+                "lib" : "../../src/lib"
+            }
+        });
+    </script>
 	<script src="test.js"></script>
 </head>
 <body>
 	<div id="qunit"></div>
-	<div id="qunit-fixture">test markup</div>
+	<div id="qunit-fixture">
+        <div id="datepicker"></div>
+        <div id="result"></div>
+    </div>
 </body>
 </html>

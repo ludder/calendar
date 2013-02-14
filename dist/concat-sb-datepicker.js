@@ -1,42 +1,419 @@
+/*global define*/
+define(function () {
+    function debug() {
+        if (window.console) {
+            console.log(arguments);
+        }
+    }
 
-var sbDatepicker = (function (DP) {
-
-    DP.Model = {
-
+    return {
+        debug : debug
     };
+});
 
+/*global define */
+define([
+    'lib/jquery', 
+    'js/sb-datepicker-utils', 
+    'js/sb-datepicker.model', 
+    'js/sb-datepicker.view'
+], function ($, $utils, Model, View) {
 
-}(sbDatepicker));
+    /* @Constructor Controller
+     * @param {object} options
+     */
+    function Controller(options) {
 
-var SBDatepicker = (function (sbd) {
+        this.options = options;
 
-    sbd.Model = function () {
-        
-        this.today = new Date();
-        // create month cells
-        //
-        this.startDate = 0;
+        this.model = new Model(this.options);
 
-        this.endDate = 30;
+        this.view = new View(this.options);
 
-        //this.
+        this.days= [];
+    }
 
-    };
+    Controller.prototype = {
 
-    sbd.prototype = {
-        
-        getDay              : function (date) {
-            return date.getDay();
+        init    : function () {
+            this.createMonths();
+            this.render();
+            
+            this.initEvents();
         },
 
-        // create month cells
-        createMonthCells : function () {
-            var arr = [],
-                firstDay = this.today.getDay();
+        createMonths : function () {
+            this.days = this.model.createMonthRange();
+        },
+
+        render : function () {
+            this.view.render(this.days);
+        },
+
+        addMonth : function () {},
+        
+        refresh : function () {},
+
+        destroy : function () {},
+
+        initEvents : function () {
+            this.view.initEvents();
         }
 
     };
 
-    return sbd;
+    // create datepicker instance
+    function init(options) {
 
-}(SBDatepicker));
+        // check required start options object
+        if (!$.isPlainObject(options)) {
+            $utils.debug('invalid options object', options);
+            return;
+        }
+
+        return new Controller(options).init();
+    }
+
+    return {
+        init : init
+    };
+
+});
+
+/*global define*/
+define(['js/sb-datepicker.controller'], function (Controller) {
+    return {
+        init : function (options) {
+            return Controller.init(options);
+        }
+    };
+});
+
+/*global define */
+define(['lib/jquery', 'js/sb-datepicker-utils.js'], function ($, $utils) {
+
+    // constants
+    var AY_MS = 1000 * 60 * 60 * 24,
+        today = new Date().setHours(0),
+        defaults = {
+            range           : 1,
+            startDate       : today,
+            minDate         : today,
+            maxDate         : new Date(2100, 1, 1)
+        };
+
+    /* loop array, in both directions
+     * @param {number} nr of loops
+     * @param {function} callback function to call on each item
+     * @param {number} direction [optional] defaults to 1, -1 will reverse direction
+     * @return {array} with modified parts
+     */
+    function loop(nr, callback, direction) {
+        var i,
+            arr = [];
+
+        direction = direction || 1;
+
+        i = direction > 0 ? 1 : 0;
+
+        for (; i < nr; i += 1) {
+            arr.push(callback(direction * i));
+        }
+        return (direction < 0 ? arr.reverse() : arr);
+    }
+
+    // date helpers
+
+    /* find first day index in week
+     * @param {Date} date
+     * @return {number} index [0-6] of day in week
+     */
+    function firstDay(date) {
+        return new Date(date.setDate(1)).getDay();
+    }
+
+    /* find last day in month and weekindex of last date
+     * @param {number} year
+     * @param {number} month
+     * @return {object}
+     *      {number} date last day of month [0-30]
+     *      {number} weekindex of last day [0-6]
+     */
+    function lastDate(year, month) {
+        var last = new Date(year, month + 1, 0);
+        return {
+            date : last.getDate(),
+            day  : last.getDay()
+        };
+    }
+
+
+    /* creates array of month days
+    * @param {date} minDate to start selectable
+    * @param {date} maxDate to end range with
+    * @return {Array} month days array
+    */
+    function createMonthDays (date) {
+        var month       = date.getMonth(),
+            year        = date.getFullYear(),
+            nrMonthDays = lastDate(year, month).date + 1;
+
+        return loop(nrMonthDays, this.createAddDay(date));
+    }
+
+    /* @constructor
+     * @param {date} date of calendar start date
+     */
+    function Model(options) {
+
+        // update user options in default object
+        this.options = $.extend({}, defaults, options);
+
+        this.today = today;
+
+        // holds array of current days
+        this.days = [];
+
+    }
+
+
+
+    Model.prototype = {
+
+        // find out if date is in range of optional min and max
+        isInRange : function (date) {
+            return (date > this.options.minDate && date < this.options.maxDate);
+        },
+
+        isDisabled : function (date) {
+            return (date < this.today || date > this.maxDate);
+        },
+
+        /* create day model
+        * @param {date} date object
+        */
+        addDay : function (date) {
+            return {
+                "date"          : date,
+                "selectable"    : this.isInRange(date),
+                "disabled"      : this.isDisabled(date)
+            };
+        },
+
+        // partial day model
+        createAddDay : function (date) {
+            var self = this,
+                year = date.getFullYear(),
+                month = date.getMonth(),
+                mDate = date.getDate();
+            return function (index) {
+                return self.addDay(new Date(year, month, mDate + index));            
+            };
+        },
+
+        /* fill up month in grid after current month
+        * @param {date} date of month
+        * @return {array} array of days after this month to fill up grid
+        */
+        getPostMonth : function (date) {
+            var lastdate = lastDate(date.getFullYear(), date.getMonth()),
+                last = lastdate.day,
+                postFillDays = 6 - last,
+                nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
+
+            return (loop(postFillDays, this.createAddDay(nextMonth)));
+        },
+
+        /* fill up month in grid before current month
+        * @param {date} date of month
+        * @return {array} array of days before this month to fill up grid
+        */
+        getPreMonth : function (date) {
+            var prefillDays = firstDay(date) + 1; // number of days this week in last month
+            return (loop(prefillDays, this.createAddDay(date), -1));
+        },
+
+        /* push previous month days in first week to this.days */
+        addPreMonth : function (date) {
+            this.days = this.days.concat(this.getPreMonth(date));
+        },
+
+        // add fill up days after this month in last week
+        addPostMonth : function (date) {
+            this.days = this.days.concat(this.getPostMonth(date));
+        },
+
+        // add all month days of [date] month to this.days
+        addMonth : function (date) {
+           this.days = this.days.concat(createMonthDays(date));
+        },
+
+        addNextMonth : function (date) {
+            var curLen = this.days.length,
+                last = this.days[curLen - 1];
+            console.log(last);
+        },
+
+        // create full range of days in certain period
+        createMonthRange : function () {
+            var i,
+                tmpDate,
+                copyStart = new Date(this.options.startDate.getTime()),
+                curMonth = copyStart.getMonth();
+
+            this.addPreMonth(copyStart);
+            this.addMonth(copyStart);
+
+            for (i = 1; i < this.options.range; i += 1) {
+                tmpDate = new Date(copyStart.setMonth(curMonth += 1));
+                this.addMonth(tmpDate);
+            }
+
+            this.addPostMonth(copyStart);
+
+            return this.days;
+        }
+
+
+
+    };
+
+    return Model;
+
+});
+
+/*global define */
+define(['lib/jquery'], function ($) {
+
+    var classNames = {
+            wrapper : 'dp-datepicker',
+            year    : 'dp-year',
+            month   : 'dp-month',
+            weekDays: 'dp-wdays',
+
+            selectable : 'dp-selectable',
+            disabled    : 'dp-disabled'
+        },
+    
+        templates = {
+            day : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled}">${date}</a></li>',
+
+            month : '<span class="' + classNames.month + '">${month}</span>',
+
+            weekDays : '<div class="' + classNames.weekDays + '">' +
+                        '<span>S</span><span>M</span><span>T</span><span>W</span>' +
+                        '<span>T</span><span>F</span><span>S</span>' +
+                        '</div>',
+
+            year : '<div class="' + classNames.year + '">${year}</div>',
+
+            wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
+        },
+        templReg = /\$\{(\w+)\}/gim,
+        defaults = {
+            shortMonths : ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec']
+        };
+
+    function View(options) {
+
+        this.months = options.months || defaults.shortMonths;
+
+        this.$container = typeof options.containerId === 'string' ? 
+                $('#' + options.containerId) : 
+                $('body');
+
+        this.$result = $('#' + options.resultId);
+    }
+
+    View.prototype = {
+
+        wrap : function (html) {
+            return templates.wrapper.replace(templReg, html);
+        },
+
+        renderWeekDays : function () {
+            return templates.weekDays;
+        },
+
+        renderYear : function (date) {
+            date = date || new Date();
+
+            var year = date.getFullYear();
+
+            return templates.year.replace(templReg, year);
+        },
+
+        renderMonth : function (monthIndex) {
+            return templates.month.replace(templReg, this.months[monthIndex]);
+        },
+
+        renderDay : function (day, s) {
+            var prop = day[s],
+                tmpDate = (prop && typeof prop.getDate === 'function') && prop.getDate(),
+                month = tmpDate && prop.getMonth();
+
+            switch (s) {
+            case 'date':
+                return (tmpDate === 1 ? this.renderMonth(month) + ' ' + tmpDate : tmpDate);
+            case 'msdate':
+                return day.date.getTime();
+            case 'selectable':
+                return (prop && classNames[s] || '');
+            case 'disabled':
+                return (prop && classNames[s] || '');
+            default:
+                return prop;
+            }
+
+        },
+
+        createRenderDay : function (date) {
+            var self = this;
+            return function (m, s) {
+                return self.renderDay(date, s);
+            };
+        },
+
+        render : function (days) {
+            var self = this,
+                html = this.renderYear(days[0] && days[0].date),
+                monthArr = days;
+
+
+            // render days header
+            html += this.renderWeekDays();
+
+            // month days
+            html += '<ul class="dp">';
+
+            monthArr.forEach(function (date) {
+                html += templates.day.replace(templReg, self.createRenderDay(date));
+            });
+
+            html += '</ul>';
+
+            this.$container.html(this.wrap(html));
+
+            this.$datepicker = this.$container.find('.' + classNames.wrapper).eq(0);
+
+            return this.$datepicker;
+
+        },
+
+        initEvents : function () {
+            var self = this;
+            // 
+            this.$datepicker.on('click', '.' + classNames.selectable, function (e) {
+                e.preventDefault();
+                self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10))); 
+            });
+
+            this.$datepicker.on('click', '.' + classNames.month, function (e) {
+                
+            });
+        }
+    };
+
+    return View;
+
+});

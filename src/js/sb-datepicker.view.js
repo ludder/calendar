@@ -123,6 +123,10 @@ define(['lib/jquery'], function ($) {
                 e.preventDefault();
                 self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10))); 
             });
+
+            this.$datepicker.on('click', '.' + classNames.month, function (e) {
+                
+            });
         }
     };
 
