@@ -1,5 +1,9 @@
 /*global define */
-define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
+define([
+    'lib/jquery', 
+    'js/sb-datepicker.utils',
+    'js/sb-datepicker.date'
+], function ($, $utils, $date) {
 
     // constants
     var AY_MS = 1000 * 60 * 60 * 24,
@@ -9,61 +13,14 @@ define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
             startDate       : today,
             minDate         : today,
             maxDate         : new Date(2100, 1, 1)
-        };
+        },
+        // local reference to util functions
+        compose = $utils.compose,
 
-    /* loop array, in both directions
-     * @param {number} nr of loops
-     * @param {function} callback function to call on each item
-     * @param {number} direction [optional] defaults to 1, -1 will reverse direction
-     * @return {array} with modified parts
-     */
-    function loop(nr, callback, direction) {
-        var i,
-            arr = [];
-
-        direction = direction || 1;
-
-
-        for (i = 0; i < nr; i += 1) {
-            arr.push(callback(direction * i));
-        }
-        return (direction < 0 ? arr.reverse() : arr);
-    }
-
-    // date helpers
-
-    function nextDay(date) {
-        return new Date(date.getYear(), date.getMonth(), date.getDate() + 1);
-    }
-
-    // get first date of month
-    function firstDate(date) {
-        return new Date(date.setDate(1));
-    }
-
-    /* find first day index in week
-     * @param {Date} date
-     * @return {number} index [0-6] of day in week
-     */
-    function firstDay(date) {
-        return firstDate(date).getDay();
-    }
-
-    /* find last day in month and weekindex of last date
-     * @param {number} year
-     * @param {number} month
-     * @return {object}
-     *      {number} date last day of month [0-30]
-     *      {number} weekindex of last day [0-6]
-     */
-    function lastDate(year, month) {
-        var last = new Date(year, month + 1, 0);
-        return {
-            date : last.getDate(),
-            day  : last.getDay()
-        };
-    }
-
+        // local reference to date functions
+        nextDayDate = $date.nextDayDate,
+        firstOfMonthWeekday = $date.firstOfMonthWeekday,
+        lastOfMonth = $date.lastOfMonth;
 
 
     /* @constructor
@@ -131,12 +88,12 @@ define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
         * @return {array} array of days after this month to fill up grid
         */
         getPostMonth : function (date) {
-            var lastdate = lastDate(date.getFullYear(), date.getMonth()),
+            var lastdate = lastOfMonth(date),
                 last = lastdate.day,
                 postFillDays = 6 - last,
                 nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
 
-            return (loop(postFillDays, this.createAddDay(nextMonth)));
+            return (compose(postFillDays, this.createAddDay(nextMonth)));
         },
 
         /* fill up month in grid before current month
@@ -144,8 +101,8 @@ define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
         * @return {array} array of days before this month to fill up grid
         */
         getPreMonth : function (date) {
-            var prefillDays = firstDay(date) + 1; // number of days this week in last month
-            return (loop(prefillDays, this.createAddDay(date), -1));
+            var prefillDays = firstOfMonthWeekday(date) + 1; // number of days this week in last month
+            return (compose(prefillDays, this.createAddDay(date), -1));
         },
 
         /* push previous month days in first week to this.days */
@@ -170,28 +127,28 @@ define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
         createMonthDays : function (date) {
             var month       = date.getMonth(),
                 year        = date.getFullYear(),
-                nrMonthDays = lastDate(year, month).date + 1,
+                nrMonthDays = lastOfMonth(date).date + 1,
                 daysLen     = this.days.length,
                 startDay = 1,
                 start,
                 last;
-
+/*
             if (daysLen) {
                 last = this.days[daysLen - 1].date;
                 console.log(isInLastMonth(date, last));
                 startDay = isInLastMonth(date, last) ? startDay : last.getDate();
                 nrMonthDays  = startDay === 1 ? nrMonthDays : startDay;
             } 
+*/
+            start = new Date(year, month, date.getDate());
 
-            start = new Date(year, month, startDay);
-
-            return loop(nrMonthDays, this.createAddDay(start));
+            return compose(nrMonthDays, this.createAddDay(start));
         },
 
         // add all month days of [date] month to this.days
         addMonth : function (date) {
             if (!date) {
-                date = nextDay(this.getLastDay().date);
+                date = nextDayDate(this.getLastDay().date);
             }
             this.days = this.days.concat(this.createMonthDays(date));
         },
@@ -220,6 +177,10 @@ define(['lib/jquery', 'js/sb-datepicker-utils'], function ($, $utils) {
             this.addPostMonth(copyStart);
 
             return this.days;
+        },
+
+        appendMonthRange : function (nrMonths) {
+            
         }
 
 

@@ -6,13 +6,15 @@ define(function () {
         }
     }
 
-    /* loop array, in both directions
-     * @param {number} nr of loops
+    /* compose array after calling function x times, inserting x as argument, in both directions
+     * 
+     * @param {number} nr of repeats
      * @param {function} callback function to call on each item
-     * @param {number} direction [optional] defaults to 1, -1 will reverse direction
+     * @param {number} direction [optional] defaults to 1, -1 will count backwards, 
+     *      but returning array in order from small to big
      * @return {array} with modified parts
      */
-    function loop(nr, callback, direction) {
+    function compose(nr, callback, direction) {
         var i,
             arr = [];
 
@@ -27,7 +29,7 @@ define(function () {
 
     return {
         debug   : debug,
-        loop    : loop
+        compose : compose
     };
 
 });

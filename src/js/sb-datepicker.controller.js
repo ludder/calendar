@@ -1,7 +1,7 @@
 /*global define */
 define([
     'lib/jquery', 
-    'js/sb-datepicker-utils', 
+    'js/sb-datepicker.utils', 
     'js/sb-datepicker.model', 
     'js/sb-datepicker.view'
 ], function ($, $utils, Model, View) {
