@@ -166,13 +166,13 @@ define(['lib/jquery', 'js/sb-datepicker-utils.js'], function ($, $utils) {
             var i,
                 tmpDate,
                 copyStart = new Date(this.options.startDate.getTime()),
-                curMonth = copyStart.getMonth();
+                curMonth = copyStart.getMonth(),
+                loops = this.options.range;
 
             this.addPreMonth(copyStart);
-            this.addMonth(copyStart);
 
-            for (i = 1; i < this.options.range; i += 1) {
-                tmpDate = new Date(copyStart.setMonth(curMonth += 1));
+            for (i = 0; i < loops; i += 1) {
+                tmpDate = new Date(copyStart.setMonth(curMonth + i));
                 this.addMonth(tmpDate);
             }
 
