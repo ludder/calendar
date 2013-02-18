@@ -20,7 +20,8 @@ define([
         // local reference to date functions
         nextDayDate = $date.nextDayDate,
         firstOfMonthWeekday = $date.firstOfMonthWeekday,
-        lastOfMonth = $date.lastOfMonth;
+        lastOfMonth = $date.lastOfMonth,
+        yesterday = $date.yesterday;
 
 
     /* @constructor
@@ -79,6 +80,7 @@ define([
                 month = date.getMonth(),
                 mDate = date.getDate();
             return function (index) {
+                console.log('index add day', mDate, index);
                 return self.addDay(new Date(year, month, mDate + index));            
             };
         },
@@ -89,7 +91,7 @@ define([
         */
         getPostMonth : function (date) {
             var lastdate = lastOfMonth(date),
-                last = lastdate.day,
+                last = lastdate.weekday,
                 postFillDays = 6 - last,
                 nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
 
@@ -101,8 +103,8 @@ define([
         * @return {array} array of days before this month to fill up grid
         */
         getPreMonth : function (date) {
-            var prefillDays = firstOfMonthWeekday(date) + 1; // number of days this week in last month
-            return (compose(prefillDays, this.createAddDay(date), -1));
+            var prefillDays = firstOfMonthWeekday(date); // number of days this week in last month
+            return (compose(prefillDays, this.createAddDay(yesterday(date)), -1));
         },
 
         /* push previous month days in first week to this.days */
@@ -125,7 +127,7 @@ define([
         * @return {Array} month days array
         */
         createMonthDays : function (date) {
-            var nrMonthDays = lastOfMonth(date).date + 1;
+            var nrMonthDays = lastOfMonth(date).date;
             return compose(nrMonthDays, this.createAddDay(date));
         },
 
@@ -151,6 +153,7 @@ define([
 
             for (i = 0; i < loops; i += 1) {
                 tmpDate = new Date(copyStart.setMonth(curMonth + i));
+                console.log(tmpDate);
                 this.addMonth(tmpDate);
             }
 

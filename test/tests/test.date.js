@@ -48,6 +48,13 @@ require(['js/sb-datepicker.date'], function ($date) {
 
     });
 
+    test("yesterday", function () {
+    
+        equal($date.yesterday(new Date(2013, 11, 10)).getDate(), 9, "the day before the 9th of december");
+        equal($date.yesterday(new Date(2013, 11, 1)).getDate(), 30, "the day before the 1st of december");
+        equal($date.yesterday(new Date(2013, 0, 1)).getDate(), 31, "the day before the 1st of januari");
+
+    });
 });
 
 

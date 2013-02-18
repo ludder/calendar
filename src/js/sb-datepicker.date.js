@@ -33,11 +33,16 @@ define(function() {
         };
     }
 
+    function yesterday(date) {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1);
+    }
+
     return {
         nextDayDate         : nextDayDate,
         firstOfMonthDate    : firstOfMonthDate,
         firstOfMonthWeekday : firstOfMonthWeekday,
-        lastOfMonth         : lastOfMonth
+        lastOfMonth         : lastOfMonth,
+        yesterday           : yesterday
     };
 
 });
