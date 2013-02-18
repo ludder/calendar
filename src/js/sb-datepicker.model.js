@@ -125,31 +125,12 @@ define([
         * @return {Array} month days array
         */
         createMonthDays : function (date) {
-            var month       = date.getMonth(),
-                year        = date.getFullYear(),
-                nrMonthDays = lastOfMonth(date).date + 1,
-                daysLen     = this.days.length,
-                startDay = 1,
-                start,
-                last;
-/*
-            if (daysLen) {
-                last = this.days[daysLen - 1].date;
-                console.log(isInLastMonth(date, last));
-                startDay = isInLastMonth(date, last) ? startDay : last.getDate();
-                nrMonthDays  = startDay === 1 ? nrMonthDays : startDay;
-            } 
-*/
-            start = new Date(year, month, date.getDate());
-
-            return compose(nrMonthDays, this.createAddDay(start));
+            var nrMonthDays = lastOfMonth(date).date + 1;
+            return compose(nrMonthDays, this.createAddDay(date));
         },
 
         // add all month days of [date] month to this.days
         addMonth : function (date) {
-            if (!date) {
-                date = nextDayDate(this.getLastDay().date);
-            }
             this.days = this.days.concat(this.createMonthDays(date));
         },
 
@@ -159,18 +140,17 @@ define([
             console.log(last);
         },
 
-        // create full range of days in certain period
         createMonthRange : function () {
             var i,
                 tmpDate,
                 copyStart = new Date(this.options.startDate.getTime()),
-                curMonth = copyStart.getMonth();
+                curMonth = copyStart.getMonth(),
+                loops = this.options.range;
 
             this.addPreMonth(copyStart);
-            this.addMonth(copyStart);
 
-            for (i = 1; i < this.options.range; i += 1) {
-                tmpDate = new Date(copyStart.setMonth(curMonth += 1));
+            for (i = 0; i < loops; i += 1) {
+                tmpDate = new Date(copyStart.setMonth(curMonth + i));
                 this.addMonth(tmpDate);
             }
 
