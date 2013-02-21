@@ -3,16 +3,21 @@ define(['lib/jquery'], function ($) {
 
     var classNames = {
             wrapper : 'dp-datepicker',
+            ul      : 'dp',
             year    : 'dp-year',
             month   : 'dp-month',
             weekDays: 'dp-wdays',
 
             selectable : 'dp-selectable',
-            disabled    : 'dp-disabled'
+            disabled    : 'dp-disabled',
+            firstweek   : 'dp-firstweek',
+
+            selectedFirst : 'dp-selected-start',
+            range           : 'dp-mo-range'
         },
     
         templates = {
-            day : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled}">${date}</a></li>',
+            day : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
             month : '<span class="' + classNames.month + '">${month}</span>',
 
@@ -77,6 +82,8 @@ define(['lib/jquery'], function ($) {
                 return (prop && classNames[s] || '');
             case 'disabled':
                 return (prop && classNames[s] || '');
+            case 'firstweek':
+                return (prop && classNames[s] || '');
             default:
                 return prop;
             }
@@ -100,7 +107,7 @@ define(['lib/jquery'], function ($) {
             html += this.renderWeekDays();
 
             // month days
-            html += '<ul class="dp">';
+            html += '<ul class="' + classNames.ul + '">';
 
             monthArr.forEach(function (date) {
                 html += templates.day.replace(templReg, self.createRenderDay(date));
@@ -120,9 +127,46 @@ define(['lib/jquery'], function ($) {
             var self = this;
             // 
             this.$datepicker.on('click', '.' + classNames.selectable, function (e) {
+                var $nexts;
                 e.preventDefault();
-                self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10))); 
+
+                // oops, should be much more elegant..., but hey it's a start ;-)
+                if (!self.$selectedStart) {
+                    self.$selectedStart = $(this.parentNode);
+                    self.$selectedStart.addClass(classNames.selectedFirst);
+
+                    $nexts = $(this.parentNode).nextAll(); //':not(.' + classNames.selectable + ')'),
+
+                    $nexts.on('mouseenter mouseleave', '.' + classNames.selectable, function (e) {
+                        var event = e.type,
+                            $prev = $(this.parentNode).prevUntil(self.$selectedStart),
+                            len = $prev.length;
+
+
+                        if (event === 'mouseleave') {
+                            $prev.removeClass(classNames.range);
+
+                        } else if (event === 'mouseenter') {
+                            while (len--) {
+
+                                if ($prev[0] !== this.parentNode) {
+                                    $prev.eq(len).addClass(classNames.range);
+                                } else {
+                                    break;
+                                }
+                            }
+
+                        }
+
+                    });
+
+
+
+                    // print selected date somewhere, until better implemented
+                    self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10))); 
+                }
             });
+
 
             this.$datepicker.on('click', '.' + classNames.month, function (e) {
                 

@@ -62,6 +62,10 @@ define([
             return (date < this.today || date > this.maxDate);
         },
 
+        isFirstWeek : function (date) {
+            return (date.getDate() <= 7);
+        },
+
         /* create day model
         * @param {date} date object
         */
@@ -69,7 +73,8 @@ define([
             return {
                 "date"          : date,
                 "selectable"    : this.isInRange(date),
-                "disabled"      : this.isDisabled(date)
+                "disabled"      : this.isDisabled(date),
+                "firstweek"     : this.isFirstWeek(date)
             };
         },
 
@@ -80,7 +85,6 @@ define([
                 month = date.getMonth(),
                 mDate = date.getDate();
             return function (index) {
-                console.log('index add day', mDate, index);
                 return self.addDay(new Date(year, month, mDate + index));            
             };
         },
@@ -91,7 +95,7 @@ define([
         */
         getPostMonth : function (date) {
             var lastdate = lastOfMonth(date),
-                last = lastdate.weekday,
+                last = lastdate.weektday,
                 postFillDays = 6 - last,
                 nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
 

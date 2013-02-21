@@ -25,7 +25,7 @@
 
     list-style: none;
     border: 1px solid #999;
-    border-width: 1px 0 0 1px;
+    border-width: 0 1px 1px 1px;
 }
 
 .dp-year {
@@ -56,11 +56,18 @@
     height: 100%;
 
     border: 1px solid #999;
-    border-width: 0 1px 1px 0;
+    border-width: 1px 1px 0 0;
 
+    padding-top: 1px; /* make space for thick border */
     line-height: 60px;
     text-align: center;
     text-decoration: none;
+}
+
+.dp li a.dp-firstweek {
+    border-top-width: 2px;
+    border-top-color: #000;
+    padding-top: 0;
 }
 
 .dp li a.dp-selectable:hover {
@@ -109,4 +116,10 @@
 .dp-disabled {
     color: #999;
     cursor: default;
+}
+
+.dp-mo-range,
+.dp-selected-start {
+    background: #000;
+    color: #fff;
 }
