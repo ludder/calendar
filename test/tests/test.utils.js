@@ -1,7 +1,14 @@
+/* globals asyncTest,deepEqual,equal,expect,module,notDeepEqual,notEqual,notStrictEqual,ok,QUnit,raises,start,stop,strictEqual,test */
+
+QUnit.config.autostart = false;
+
 require(['js/sb-datepicker.utils'], function ($utils) {
 
-    module("testing utils");
+    'use strict';
 
+    QUnit.start();
+
+    module("testing utils");
 
     test("compose", function () {
 
@@ -27,7 +34,7 @@ require(['js/sb-datepicker.utils'], function ($utils) {
     });
 
     test("compose reverse", function () {
-        
+
         var i = 3;
         var arr1 = $utils.compose(3, function (index) {
             return index + i;

@@ -1,5 +1,12 @@
+/* globals asyncTest,deepEqual,equal,expect,module,notDeepEqual,notEqual,notStrictEqual,ok,QUnit,raises,start,stop,strictEqual,test */
+
+QUnit.config.autostart = false;
 
 require(['js/sb-datepicker.model'], function (Model) {
+
+    'use strict';
+
+    QUnit.start();
 
     var model1 = new Model({
         startDate : new Date(2013, 2, 10),
@@ -21,7 +28,7 @@ require(['js/sb-datepicker.model'], function (Model) {
         ok(month, 'called month cells');
 
         equal(model1.options.startDate.getTime(), new Date(2013, 2, 10).getTime(), 'validate passed startDate');
-        
+
         equal(model1.days.length, 70, 'expected number of days');
 
         equal(model1.days[0].date.getDate(), 24, "expected first day date");

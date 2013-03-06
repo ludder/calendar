@@ -82,6 +82,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['uglify']);
     // grunt.registerTask('default', ['jshint', 'uglify']);
     grunt.registerTask('test', ['jshint', 'qunit']);
-    grunt.registerTask('watcher', ['livereload-start', 'connect', 'regarde']);
+    // grunt.registerTask('test', ['connect:qunit', 'qunit']);
+    grunt.registerTask('watcher', ['livereload-start', 'connect:livereload', 'regarde']);
 
 };
