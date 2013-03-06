@@ -1,9 +1,11 @@
 /*global define */
 define([
-    'lib/jquery', 
+    'lib/jquery',
     'js/sb-datepicker.utils',
     'js/sb-datepicker.date'
 ], function ($, $utils, $date) {
+
+    "use strict";
 
     // constants
     var AY_MS = 1000 * 60 * 60 * 24,
@@ -18,10 +20,10 @@ define([
         compose = $utils.compose,
 
         // local reference to date functions
-        nextDayDate = $date.nextDayDate,
+        nextDayDate         = $date.nextDayDate,
         firstOfMonthWeekday = $date.firstOfMonthWeekday,
-        lastOfMonth = $date.lastOfMonth,
-        yesterday = $date.yesterday;
+        lastOfMonth         = $date.lastOfMonth,
+        yesterday           = $date.yesterday;
 
 
     /* @constructor
@@ -85,7 +87,7 @@ define([
                 month = date.getMonth(),
                 mDate = date.getDate();
             return function (index) {
-                return self.addDay(new Date(year, month, mDate + index));            
+                return self.addDay(new Date(year, month, mDate + index));
             };
         },
 
@@ -166,7 +168,7 @@ define([
         },
 
         appendMonthRange : function (nrMonths) {
-            
+
         }
 
 

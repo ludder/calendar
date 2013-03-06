@@ -1,10 +1,12 @@
 /*global define */
 define([
-    'lib/jquery', 
-    'js/sb-datepicker.utils', 
-    'js/sb-datepicker.model', 
+    'lib/jquery',
+    'js/sb-datepicker.utils',
+    'js/sb-datepicker.model',
     'js/sb-datepicker.view'
 ], function ($, $utils, Model, View) {
+
+    "use strict";
 
     /* @Constructor Controller
      * @param {object} options
@@ -25,7 +27,7 @@ define([
         init    : function () {
             this.createMonths();
             this.render();
-            
+
             this.initEvents();
         },
 
@@ -38,7 +40,7 @@ define([
         },
 
         addMonth : function () {},
-        
+
         refresh : function () {},
 
         destroy : function () {},

@@ -1,6 +1,13 @@
-module.exports = function (grunt) {
+'use strict';
 
-    "use strict";
+// Set livereload parameters
+var path        = require('path');
+var lrSnippet   = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+var folderMount = function folderMount(connect, point) {
+    return connect.static(path.resolve(point));
+};
+
+module.exports = function (grunt) {
 
     grunt.initConfig({
 
@@ -39,16 +46,42 @@ module.exports = function (grunt) {
                 'src/js/*.js'
                 // 'test/tests/*.js'
             ]
+        },
+
+        connect: {
+            livereload: {
+                options: {
+                    port: 9001,
+                    middleware: function(connect, options) {
+                        return [lrSnippet, folderMount(connect, '.')]
+                    }
+                }
+            }
+        },
+        // Configuration to be run (and then tested)
+        regarde: {
+            html: {
+                files: '**/*.html',
+                tasks: ['livereload']
+            },
+            js: {
+                files: 'src/**/*.js',
+                tasks: ['livereload']
+            }
         }
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-livereload');
     grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-regarde');
 
-    grunt.registerTask('test', ['jshint', 'qunit']);
     grunt.registerTask('default', ['uglify']);
     // grunt.registerTask('default', ['jshint', 'uglify']);
+    grunt.registerTask('test', ['jshint', 'qunit']);
+    grunt.registerTask('watcher', ['livereload-start', 'connect', 'regarde']);
 
 };
