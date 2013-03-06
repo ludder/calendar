@@ -20,7 +20,7 @@ require(['js/sb-datepicker.date'], function ($date) {
             day2day = day2.getDate(),
             day3day = day3.getDate();
 
-        equal($date.nextDayDate(day1).getDate(), day1day + 2, "next day, 17");
+        equal($date.nextDayDate(day1).getDate(), day1day + 1, "next day, 17");
         equal($date.nextDayDate(day2).getDate(), day2day + 1, "expect last day of march, 13");
         equal($date.nextDayDate(day3).getDate(), 1, "next day, expected first of next month");
 

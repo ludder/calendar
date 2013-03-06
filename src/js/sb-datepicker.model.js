@@ -15,6 +15,7 @@ define([
             startDate       : today,
             minDate         : today,
             maxDate         : new Date(2100, 1, 1)
+            // first day of week
         },
         // local reference to util functions
         compose = $utils.compose,
@@ -55,9 +56,9 @@ define([
             return (len && this.days[len - 1]);
         },
 
-        // find out if date is in range of optional min and max
+        // find out if date is in range of optional min and max and thus is selectable
         isInRange : function (date) {
-            return (date > this.options.minDate && date < this.options.maxDate);
+            return (date >= this.options.minDate && date <= this.options.maxDate);
         },
 
         isDisabled : function (date) {
@@ -162,7 +163,7 @@ define([
                 this.addMonth(tmpDate);
             }
 
-            this.addPostMonth(copyStart);
+            this.addPostMonth(copyStart); // ???
 
             return this.days;
         },
