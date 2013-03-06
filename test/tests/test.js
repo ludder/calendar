@@ -8,9 +8,20 @@ require(['js/sb-datepicker.model'], function (Model) {
 
     QUnit.start();
 
+    // Helper functions
     function addDays(date, days) {
         return new Date( date.getTime() + (days * 86400000) );
     }
+
+    function createNewExactModel() {
+        return new Model({
+            minDate   : new Date(2023, 2, 10),
+            startDate : new Date(2023, 2, 10),
+            maxDate   : new Date(2023, 8, 10),
+            range     : 3
+        });
+    }
+    // END Helper functions
 
     var today = new Date(); // Today
     var maxDate = addDays(today, 340); // Today + 340 days
@@ -24,18 +35,14 @@ require(['js/sb-datepicker.model'], function (Model) {
     });
 
     // Exact model, in the far future to not break tests
-    var modelExact = new Model({
-        minDate   : new Date(2023, 2, 10),
-        startDate : new Date(2023, 2, 10),
-        maxDate   : new Date(2023, 8, 10),
-        range     : 3
-    });
+    var modelExact = createNewExactModel();
 
 
     module("Datepicker model - Public functions");
 
     test("function getLastDay()", function () {
-        // ??
+        // TODO why breaks???
+        // console.log(modelExact);
         equal(new Date(modelExact.getLastDay().date).getTime(), maxDate.getTime(), 'getLastDay should return April, 30, 2023');
     });
 
@@ -54,12 +61,80 @@ require(['js/sb-datepicker.model'], function (Model) {
         equal(modelRelative.isInRange(addDays(today, -1)), false, 'Yesterday should be out of range');
         // Max date
         var myMaxDate = new Date(maxDate.getTime());
-        console.log('a', myMaxDate);
-        console.log('c', myMaxDate);
-        console.log('b', addDays(myMaxDate, 1));
         equal(modelRelative.isInRange(myMaxDate), true, 'maxDate should be in range');
         equal(modelRelative.isInRange(addDays(myMaxDate, 1)), false, 'maxDate +1 should be out of range');
     });
+
+    test("function isDisabled()", function () {
+        // Exact model
+        equal(modelExact.isDisabled(new Date(2023, 2, 10)), false, 'March, 10 2023 should not be disabled');
+
+        // Relative model
+        // Min date
+        equal(modelRelative.isDisabled(today), false, 'Today should not be disabled');
+        equal(modelRelative.isDisabled(addDays(today, -1)), true, 'Yesterday should be disabled');
+        // Max date
+        equal(modelRelative.isDisabled(maxDate), false, 'maxDate should not be disabled');
+    });
+
+    test("function isFirstWeek()", function () {
+        // Exact model
+        equal(modelExact.isDisabled(new Date(2023, 2, 1)), false, 'March, 1 should be in the first week of the month');
+        equal(modelExact.isDisabled(new Date(2023, 2, 7)), false, 'March, 1 should be in the first week of the month');
+        equal(modelExact.isDisabled(new Date(2023, 2, 8)), false, 'March, 1 should be in the first week of the month');
+        equal(modelExact.isDisabled(new Date(2023, 2, 31)), false, 'March, 1 should be in the first week of the month');
+    });
+
+    test("function addDay()", function () {
+        expect(0); // Tested in other functions
+    });
+
+    test("function createAddDay()", function () {
+        expect(0); // Tested in other functions
+    });
+
+    // TODO - function is broken
+    test("function getPostMonth()", function () {
+        expect(0); // for now...
+    //     console.log(modelExact.getPostMonth(new Date(2023, 2, 30)));
+    //     equal(modelExact.getPostMonth(new Date(2023, 2, 30)), 101, 'getPostMonth should return ...');
+    });
+
+    test("function getPreMonth()", function () {
+        // XXX Does this test break when Sunday is not first day of the week??
+        equal(modelExact.getPreMonth(new Date(2013, 2, 1)).length, 5, 'March 2013 should return 5 days');
+        equal(modelExact.getPreMonth(new Date(2013, 2, 31)).length, 5, 'March, 31 2013 should also return 5 days');
+        equal(modelExact.getPreMonth(new Date(2013, 3, 1)).length, 1, 'April 2013 should return 1 day');
+        equal(modelExact.getPreMonth(new Date(2013, 8, 1)).length, 0, 'September2013 should return 0 days');
+    });
+
+    test("function addPreMonth()", function () {
+        // XXX Does this test break when Sunday is not first day of the week??
+        var model;
+
+        model = createNewExactModel();
+        model.addPreMonth(new Date(2013, 2, 1));
+        equal(model.days.length, 5, 'March 2013 should return 5 days');
+
+        model = createNewExactModel();
+        model.addPreMonth(new Date(2013, 2, 31));
+        equal(model.days.length, 5, 'March 2013 should return 5 days');
+
+        model = createNewExactModel();
+        model.addPreMonth(new Date(2013, 3, 1));
+        equal(model.days.length, 1, 'April 2013 should return 1 day');
+
+        model = createNewExactModel();
+        model.addPreMonth(new Date(2013, 8, 1));
+        equal(model.days.length, 0, 'September 2013 should return 0 days');
+    });
+
+    test("function addPostMonth()", function () {
+        // XXX Does this test break when Sunday is not first day of the week??
+        var model;
+        equal(1, 0, 'GEBLEVEN BIJ addPostMonth()');
+    });
+
 
 
 

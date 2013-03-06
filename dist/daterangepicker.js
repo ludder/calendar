@@ -13,6 +13,7 @@ define(function() {
         loop: t
     };
 }), define([ "lib/jquery", "js/sb-datepicker.utils", "js/sb-datepicker.model", "js/sb-datepicker.view" ], function(e, t, n, a) {
+    "use strict";
     function r(e) {
         this.options = e, this.model = new n(this.options), this.view = new a(this.options), 
         this.days = [];
@@ -74,6 +75,7 @@ define(function() {
         }
     };
 }), define([ "lib/jquery", "js/sb-datepicker.utils", "js/sb-datepicker.date" ], function(e, t, n) {
+    "use strict";
     function a(t) {
         this.options = e.extend({}, s, t), this.today = r, this.days = [];
     }
@@ -89,7 +91,7 @@ define(function() {
             return e && this.days[e - 1];
         },
         isInRange: function(e) {
-            return e > this.options.minDate && this.options.maxDate > e;
+            return e >= this.options.minDate && this.options.maxDate >= e;
         },
         isDisabled: function(e) {
             return this.today > e || e > this.maxDate;

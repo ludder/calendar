@@ -65,6 +65,9 @@ define([
             return (date < this.today || date > this.maxDate);
         },
 
+        // Day is in the first seven days of the month?
+        // TODO
+        // Maybe this should be if it's in the first counting from Sunday from the month before??
         isFirstWeek : function (date) {
             return (date.getDate() <= 7);
         },
@@ -97,12 +100,15 @@ define([
         * @return {array} array of days after this month to fill up grid
         */
         getPostMonth : function (date) {
-            var lastdate = lastOfMonth(date),
-                last = lastdate.weektday,
+            var lastdate     = lastOfMonth(date),
+                last         = lastdate.weektday,
                 postFillDays = 6 - last,
-                nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
+                nextMonth    = new Date(date.getFullYear(), date.getMonth() + 1);
 
-            return (compose(postFillDays, this.createAddDay(nextMonth)));
+            var x = compose(postFillDays, this.createAddDay(nextMonth));
+            // TODO - broken?
+            // console.log(x);
+            return x;
         },
 
         /* fill up month in grid before current month
