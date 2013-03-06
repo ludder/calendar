@@ -1,44 +1,44 @@
-
 module.exports = function (grunt) {
+
+    "use strict";
 
     grunt.initConfig({
 
         pkg: grunt.file.readJSON('package.json'),
 
-        concat : {
-
-            dist : {
-                // files to concat
-                src : ['src/js/*.js'],
-                // location of resulting js file
-                dest : 'dist/concat-<%= pkg.name %>.js'
-
-            }
-        },
-
-        uglify : {
-            dist : {
-                src : '<%= concat.dist.dest %>',
-                dest : 'dist/<%= pkg.name %>.min.js'
-
+        uglify: {
+            options: {
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                        '<%= grunt.template.today("yyyy-mm-dd hh:mm") %> */ \n'
+            },
+            squeeze: {
+                files: {
+                    'dist/<%= pkg.name %>.min.js': ['src/js/*.js']
+                }
+            },
+            beautify: {
+                options: {
+                    beautify: true
+                },
+                files: {
+                    'dist/<%= pkg.name %>.js': ['src/js/*.js']
+                }
             }
         },
 
         qunit : {
-            files : ['test/tests/*.html']
+            all : ['test/tests/*.html']
         },
 
-        lint : {
-            files: ['grunt.js', 'src/js/*.js', 'test/tests/*.js']
-        },
-
-
-        jshint : {
-            // define the files to lint
-            // configure JSHint (documented at http://www.jshint.com/docs/)
+        jshint: {
             options: {
-                // more options here if you want to override JSHint defaults
-            }
+                jshintrc: '.jshintrc'
+            },
+            all_files: [
+                'Gruntfile.js',
+                'src/js/*.js'
+                // 'test/tests/*.js'
+            ]
         }
 
     });
@@ -46,11 +46,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
-    grunt.loadNpmTasks('grunt-contrib-concat');
 
-
-    grunt.registerTask('test', 'lint qunit');
-    // grunt.registerTask('default', 'lint qunit concat min');
-    grunt.registerTask('default', 'qunit concat min');
+    grunt.registerTask('test', ['jshint', 'qunit']);
+    grunt.registerTask('default', ['uglify']);
+    // grunt.registerTask('default', ['jshint', 'uglify']);
 
 };

@@ -1,0 +1,22 @@
+{
+    "browser":  true,
+    "eqeqeq":   true,
+    "curly":    true,
+    "forin":    true,
+    "immed":    true,
+    "latedef":  true,
+    "undef":     true,
+    "unused":    true,
+    "trailing":  true,
+    "strict":    true,
+    "smarttabs": true,
+    "maxlen":    200,
+    "indent":    4,
+    "evil":     true,
+    "globals" : {
+        "console" : true,
+        "define" : true,
+        "module" : true,
+        "require" : true
+    }
+}
