@@ -15,7 +15,7 @@ define(['lib/jquery'], function ($) {
             selectedFirst : 'dp-selected-start',
             range           : 'dp-mo-range'
         },
-    
+
         templates = {
             day : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
@@ -39,8 +39,8 @@ define(['lib/jquery'], function ($) {
 
         this.months = options.months || defaults.shortMonths;
 
-        this.$container = typeof options.containerId === 'string' ? 
-                $('#' + options.containerId) : 
+        this.$container = typeof options.containerId === 'string' ?
+                $('#' + options.containerId) :
                 $('body');
 
         this.$result = $('#' + options.resultId);
@@ -125,53 +125,53 @@ define(['lib/jquery'], function ($) {
 
         initEvents : function () {
             var self = this;
-            // 
+            //
             this.$datepicker.on('click', '.' + classNames.selectable, function (e) {
                 var $nexts;
                 e.preventDefault();
 
-                // oops, should be much more elegant..., but hey it's a start ;-)
                 if (!self.$selectedStart) {
+
                     self.$selectedStart = $(this.parentNode);
                     self.$selectedStart.addClass(classNames.selectedFirst);
 
                     $nexts = $(this.parentNode).nextAll(); //':not(.' + classNames.selectable + ')'),
 
                     $nexts.on('mouseenter mouseleave', '.' + classNames.selectable, function (e) {
-                        var event = e.type,
-                            $prev = $(this.parentNode).prevUntil(self.$selectedStart),
-                            len = $prev.length;
-
-
-                        if (event === 'mouseleave') {
-                            $prev.removeClass(classNames.range);
-
-                        } else if (event === 'mouseenter') {
-                            while (len--) {
-
-                                if ($prev[0] !== this.parentNode) {
-                                    $prev.eq(len).addClass(classNames.range);
-                                } else {
-                                    break;
-                                }
-                            }
-
-                        }
-
+                        self.handleHoverEvent(e.type, self, this.parentNode);
                     });
 
-
-
                     // print selected date somewhere, until better implemented
-                    self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10))); 
+                    self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10)));
                 }
             });
 
 
             this.$datepicker.on('click', '.' + classNames.month, function (e) {
-                
+
             });
+        },
+
+        handleHoverEvent: function(eventType, self, parentNode) {
+            var $prev = $(parentNode).prevUntil(self.$selectedStart),
+                len = $prev.length;
+
+            if (eventType === 'mouseleave') {
+                $prev.removeClass(classNames.range);
+
+            } else if (eventType === 'mouseenter') {
+                while (len--) {
+
+                    if ($prev[0] !== parentNode) {
+                        $prev.eq(len).addClass(classNames.range);
+                    } else {
+                        break;
+                    }
+                }
+
+            }
         }
+
     };
 
     return View;
