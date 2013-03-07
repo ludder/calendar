@@ -2,33 +2,34 @@
 define(['lib/jquery'], function ($) {
 
     var classNames = {
-            wrapper : 'dp-datepicker',
-            ul      : 'dp',
-            year    : 'dp-year',
-            month   : 'dp-month',
-            weekDays: 'dp-wdays',
+            wrapper  : 'dp-datepicker',
+            ul       : 'dp',
+            year     : 'dp-year',
+            month    : 'dp-month',
+            weekDays : 'dp-wdays',
 
-            selectable : 'dp-selectable',
-            disabled    : 'dp-disabled',
-            firstweek   : 'dp-firstweek',
+            selectable    : 'dp-selectable',
+            disabled      : 'dp-disabled',
+            firstweek     : 'dp-firstweek',
 
             selectedFirst : 'dp-selected-start',
-            range           : 'dp-mo-range'
+            selectedLast  : 'dp-selected-end',
+            range         : 'dp-mo-range'
         },
 
         templates = {
-            day : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
+            day      : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
-            month : '<span class="' + classNames.month + '">${month}</span>',
+            month    : '<span class="' + classNames.month + '">${month}</span>',
 
             weekDays : '<div class="' + classNames.weekDays + '">' +
                         '<span>S</span><span>M</span><span>T</span><span>W</span>' +
                         '<span>T</span><span>F</span><span>S</span>' +
                         '</div>',
 
-            year : '<div class="' + classNames.year + '">${year}</div>',
+            year     : '<div class="' + classNames.year + '">${year}</div>',
 
-            wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
+            wrapper  : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
         },
         templReg = /\$\{(\w+)\}/gim,
         defaults = {
@@ -123,32 +124,57 @@ define(['lib/jquery'], function ($) {
 
         },
 
+        selectStartDate : function(self, eventTarget, parentNode) {
+            var $nexts;
+
+            self.$selectedStart = $(parentNode);
+            self.$selectedStart.addClass(classNames.selectedFirst);
+
+            $nexts = $(parentNode).nextAll(); //':not(.' + classNames.selectable + ')'),
+            $nexts.on('mouseenter.calendarhover mouseleave.calendarhover', '.' + classNames.selectable, function (e) {
+                self.handleHoverEvent(e.type, self, this.parentNode);
+            });
+
+            self.throwEventStartDateSelected(eventTarget);
+
+        },
+
+        selectEndDate : function(self, eventTarget, parentNode) {
+            // TODO
+            // HIER GEBLEVEN
+        },
+
         initEvents : function () {
             var self = this;
-            //
-            this.$datepicker.on('click', '.' + classNames.selectable, function (e) {
-                var $nexts;
-                e.preventDefault();
+
+            this.$datepicker.on('click', '.' + classNames.selectable, function (event) {
+                event.preventDefault();
 
                 if (!self.$selectedStart) {
+                    self.selectStartDate(self, event.target, this.parentNode);
+                } else {
+                    if (!self.$selectedEnd) {
+                        // End date selected
+                        var $sibs;
 
-                    self.$selectedStart = $(this.parentNode);
-                    self.$selectedStart.addClass(classNames.selectedFirst);
+                        self.$selectedEnd = $(this.parentNode);
+                        self.$selectedEnd.addClass(classNames.selectedLast);
 
-                    $nexts = $(this.parentNode).nextAll(); //':not(.' + classNames.selectable + ')'),
+                        $sibs = self.$selectedEnd.siblings();
 
-                    $nexts.on('mouseenter mouseleave', '.' + classNames.selectable, function (e) {
-                        self.handleHoverEvent(e.type, self, this.parentNode);
-                    });
-
+                        // Remove hover events
+                        $sibs.andSelf().off('.calendarhover');
+                    }
+                    // THrow event end date selected
                     // print selected date somewhere, until better implemented
-                    self.$result.html(new Date(parseInt(e.target.getAttribute('data-msdate'), 10)));
+                    self.$result.html(new Date(parseInt(event.target.getAttribute('data-msdate'), 10)));
                 }
+
             });
 
 
             this.$datepicker.on('click', '.' + classNames.month, function (e) {
-
+                // TODO
             });
         },
 
@@ -157,6 +183,7 @@ define(['lib/jquery'], function ($) {
                 len = $prev.length;
 
             if (eventType === 'mouseleave') {
+                console.log('mouseleave');
                 $prev.removeClass(classNames.range);
 
             } else if (eventType === 'mouseenter') {
@@ -170,6 +197,15 @@ define(['lib/jquery'], function ($) {
                 }
 
             }
+        },
+
+        throwEventStartDateSelected : function(target) {
+            var selected_date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
+            $("body").trigger({
+                type: 'DATERANGE_STARTDATE_SELECTED',
+                date: selected_date
+            });
+            console.log('event DATERANGE_STARTDATE_SELECTED thrown', selected_date);
         }
 
     };
