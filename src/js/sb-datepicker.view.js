@@ -156,27 +156,36 @@ define(['lib/jquery'], function ($) {
 
         },
 
-        selectStartDate : function(self, eventTarget, parentNode) {
-            var $nexts;
+        selectDay : function(date, classnames) {
+            ///////////////////
+            // HIER GEBLEVEN //
+            ///////////////////
+            // Make day selectable from month selections => there's no actual click event
+        },
 
-            self.$selectedStart = $(parentNode);
+        selectStartDate : function(self, target) {
+            var $nexts;
+            var $parentNode = $(target.parentNode);
+
+            self.$selectedStart = $parentNode;
             self.$selectedStart.addClass(classNames.selectedFirst);
 
-            $nexts = $(parentNode).nextAll(); //':not(.' + classNames.selectable + ')'),
+            $nexts = $parentNode.nextAll(); //':not(.' + classNames.selectable + ')'),
             $nexts.on('mouseenter.calendarhover mouseleave.calendarhover', '.' + classNames.selectable, function (e) {
                 self.handleHoverEvent(e.type, self, this.parentNode);
             });
 
-            self.publishStartDateSelected(eventTarget);
+            self.publishStartDateSelected(target);
 
         },
 
-        selectEndDate : function(self, eventTarget, parentNode) {
+        selectEndDate : function(self, target) {
             if (!self.$selectedEnd) {
                 // End date selected
                 var $sibs;
+                var $parentNode = $(target.parentNode);
 
-                self.$selectedEnd = $(parentNode);
+                self.$selectedEnd = $parentNode;
                 self.$selectedEnd.addClass(classNames.selectedLast);
 
                 $sibs = self.$selectedEnd.siblings();
@@ -185,7 +194,22 @@ define(['lib/jquery'], function ($) {
                 $sibs.andSelf().off('.calendarhover');
             }
 
-            self.publishEndDateSelected(eventTarget);
+            self.publishEndDateSelected(target);
+        },
+
+        setEventSelectMonth : function(self) {
+            self.$datepicker.on('click', '.' + classNames.month, function (e) {
+                var firstDay, lastDay, selectedMonth;
+                firstDay = new Date(parseInt(e.target.parentNode.getAttribute('data-msdate'), 10));
+                lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() +1, 0);
+                selectedMonth = firstDay.getMonth();
+
+                // Clear selected dates
+                self.clearSelectedDates(self, this.parentNode);
+                // Select first day of month
+                // Select last day day of month and all days in between
+                console.log(e.target, e.target.parentNode);
+            });
         },
 
         clearSelectedDates : function(self, parent) {
@@ -203,12 +227,6 @@ define(['lib/jquery'], function ($) {
             self.setEventSelectMonth(self);
         },
 
-        setEventSelectMonth : function(self) {
-            self.$datepicker.on('click', '.' + classNames.month, function (e) {
-                // TODO
-            });
-        },
-
         setEventSelectDate : function(self) {
             this.$datepicker.on('click', '.' + classNames.selectable, function (event) {
 
@@ -216,15 +234,15 @@ define(['lib/jquery'], function ($) {
 
                 if (!self.$selectedStart) {
                     // First click: select start date
-                    self.selectStartDate(self, event.target, this.parentNode);
+                    self.selectStartDate(self, event.target);
                 } else {
                     if (!self.$selectedEnd) {
                         // Second click: select end date
-                        self.selectEndDate(self, event.target, this.parentNode);
+                        self.selectEndDate(self, event.target);
                     } else {
                         // Third click: clear and select start date again
                         self.clearSelectedDates(self, this.parentNode);
-                        self.selectStartDate(self, event.target, this.parentNode);
+                        self.selectStartDate(self, event.target);
                     }
                 }
 
