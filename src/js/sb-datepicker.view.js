@@ -29,6 +29,14 @@ define(['lib/jquery'], function ($) {
             range         : 'dp-mo-range'
         },
 
+        events = {
+            daterange_startdate_selected : 'DATERANGE_STARTDATE_SELECTED',
+            daterange_enddate_selected   : 'DATERANGE_ENDDATE_SELECTED',
+            daterange_dates_cleared      : 'DATERANGE_DATES_CLEARED',
+            dp_box_closed                : 'DP_BOX_CLOSED'
+        },
+
+
         templates = {
             day      : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
@@ -52,6 +60,7 @@ define(['lib/jquery'], function ($) {
         },
 
         templReg = /\$\{(\w+)\}/gim;
+
 
     function View(options) {
 
@@ -179,6 +188,14 @@ define(['lib/jquery'], function ($) {
             self.publishEndDateSelected(eventTarget);
         },
 
+        clearSelectedDates : function(self, parent) {
+            self.$selectedStart = null;
+            self.$selectedEnd   = null;
+
+            var classnames = classNames.range + ' ' + classNames.selectedFirst + ' ' + classNames.selectedLast;
+            $(parent.parentNode).children().removeClass(classnames);
+        },
+
         initEvents : function () {
             var self = this;
 
@@ -198,20 +215,27 @@ define(['lib/jquery'], function ($) {
                 event.preventDefault();
 
                 if (!self.$selectedStart) {
+                    // First click: select start date
                     self.selectStartDate(self, event.target, this.parentNode);
                 } else {
-                    self.selectEndDate(self, event.target, this.parentNode);
+                    if (!self.$selectedEnd) {
+                        // Second click: select end date
+                        self.selectEndDate(self, event.target, this.parentNode);
+                    } else {
+                        // Third click: clear and select start date again
+                        self.clearSelectedDates(self, this.parentNode);
+                        self.selectStartDate(self, event.target, this.parentNode);
+                    }
                 }
 
             });
         },
 
         handleHoverEvent: function(eventType, self, parentNode) {
-            var $prev = $(parentNode).prevUntil(self.$selectedStart),
+            var $prev = $(parentNode).prevUntil(self.$selectedStart).andSelf(),
                 len = $prev.length;
 
             if (eventType === 'mouseleave') {
-                console.log('mouseleave');
                 $prev.removeClass(classNames.range);
 
             } else if (eventType === 'mouseenter') {
@@ -227,26 +251,40 @@ define(['lib/jquery'], function ($) {
             }
         },
 
-        publishDateSelected : function(eventName, date) {
-            $("body").trigger({
-                type: eventName,
-                date: date
-            });
+        publish : function(obj) {
+            $("body").trigger(obj);
 
             // DEBUG
-            console.log('event thrown: ' + eventName, date);
+            console.log('event thrown: ' + obj);
+        },
+
+        publishDateSelected : function(eventName, date) {
+            var obj = {
+                type: eventName,
+                date: date
+            };
+
+            this.publish(obj);
+        },
+
+        publishDatesCleared : function() {
+            var obj = {
+                type: events.daterange_dates_cleared
+            };
+
+            this.publish(obj);
         },
 
         publishStartDateSelected : function(target) {
             var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
             this.showJourney(date, defaults.journeyOutward);
-            this.publishDateSelected('DATERANGE_STARTDATE_SELECTED', date);
+            this.publishDateSelected(events.daterange_startdate_selected, date);
         },
 
         publishEndDateSelected : function(target) {
             var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
             this.showJourney(date, defaults.journeyReturn);
-            this.publishDateSelected('DATERANGE_ENDDATE_SELECTED', date);
+            this.publishDateSelected(events.daterange_enddate_selected, date);
         },
 
         showJourney : function(date, journeyType) {
