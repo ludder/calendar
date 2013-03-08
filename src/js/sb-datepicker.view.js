@@ -1,12 +1,24 @@
 /*global define */
 define(['lib/jquery'], function ($) {
 
-    var classNames = {
+    'use strict';
+
+    var defaults = {
+        // TODO - how to i18n?
+            shortMonths    : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            shortWeekDays  : ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+            journeyOutward : 'Heenreis:',
+            journeyReturn  : 'Terugreis:'
+        },
+
+        classNames = {
             wrapper  : 'dp-datepicker',
             ul       : 'dp',
             year     : 'dp-year',
             month    : 'dp-month',
             weekDays : 'dp-wdays',
+
+            journey  : 'dp-journey',
 
             selectable    : 'dp-selectable',
             disabled      : 'dp-disabled',
@@ -23,18 +35,23 @@ define(['lib/jquery'], function ($) {
             month    : '<span class="' + classNames.month + '">${month}</span>',
 
             weekDays : '<div class="' + classNames.weekDays + '">' +
-                        '<span>S</span><span>M</span><span>T</span><span>W</span>' +
-                        '<span>T</span><span>F</span><span>S</span>' +
+                        '<span>' + defaults.shortWeekDays[0] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[1] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[2] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[3] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[4] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[5] + '</span>' +
+                        '<span>' + defaults.shortWeekDays[6] + '</span>' +
                         '</div>',
 
-            year     : '<div class="' + classNames.year + '">${year}</div>',
+            year    : '<div class="' + classNames.year + '">${year}</div>',
 
-            wrapper  : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
+            journey : '<div class="' + classNames.journey + '">' + defaults.journeyOutward + '</div>',
+
+            wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
         },
-        templReg = /\$\{(\w+)\}/gim,
-        defaults = {
-            shortMonths : ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sept', 'oct', 'nov', 'dec']
-        };
+
+        templReg = /\$\{(\w+)\}/gim;
 
     function View(options) {
 
@@ -55,6 +72,10 @@ define(['lib/jquery'], function ($) {
 
         renderWeekDays : function () {
             return templates.weekDays;
+        },
+
+        renderJourney : function () {
+            return templates.journey;
         },
 
         renderYear : function (date) {
@@ -103,6 +124,8 @@ define(['lib/jquery'], function ($) {
                 html = this.renderYear(days[0] && days[0].date),
                 monthArr = days;
 
+            // render journey header
+            html += this.renderJourney();
 
             // render days header
             html += this.renderWeekDays();
@@ -135,46 +158,51 @@ define(['lib/jquery'], function ($) {
                 self.handleHoverEvent(e.type, self, this.parentNode);
             });
 
-            self.throwEventStartDateSelected(eventTarget);
+            self.publishStartDateSelected(eventTarget);
 
         },
 
         selectEndDate : function(self, eventTarget, parentNode) {
-            // TODO
-            // HIER GEBLEVEN
+            if (!self.$selectedEnd) {
+                // End date selected
+                var $sibs;
+
+                self.$selectedEnd = $(parentNode);
+                self.$selectedEnd.addClass(classNames.selectedLast);
+
+                $sibs = self.$selectedEnd.siblings();
+
+                // Remove hover events
+                $sibs.andSelf().off('.calendarhover');
+            }
+
+            self.publishEndDateSelected(eventTarget);
         },
 
         initEvents : function () {
             var self = this;
 
+            self.setEventSelectDate(self);
+            self.setEventSelectMonth(self);
+        },
+
+        setEventSelectMonth : function(self) {
+            self.$datepicker.on('click', '.' + classNames.month, function (e) {
+                // TODO
+            });
+        },
+
+        setEventSelectDate : function(self) {
             this.$datepicker.on('click', '.' + classNames.selectable, function (event) {
+
                 event.preventDefault();
 
                 if (!self.$selectedStart) {
                     self.selectStartDate(self, event.target, this.parentNode);
                 } else {
-                    if (!self.$selectedEnd) {
-                        // End date selected
-                        var $sibs;
-
-                        self.$selectedEnd = $(this.parentNode);
-                        self.$selectedEnd.addClass(classNames.selectedLast);
-
-                        $sibs = self.$selectedEnd.siblings();
-
-                        // Remove hover events
-                        $sibs.andSelf().off('.calendarhover');
-                    }
-                    // THrow event end date selected
-                    // print selected date somewhere, until better implemented
-                    self.$result.html(new Date(parseInt(event.target.getAttribute('data-msdate'), 10)));
+                    self.selectEndDate(self, event.target, this.parentNode);
                 }
 
-            });
-
-
-            this.$datepicker.on('click', '.' + classNames.month, function (e) {
-                // TODO
             });
         },
 
@@ -199,13 +227,32 @@ define(['lib/jquery'], function ($) {
             }
         },
 
-        throwEventStartDateSelected : function(target) {
-            var selected_date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
+        publishDateSelected : function(eventName, date) {
             $("body").trigger({
-                type: 'DATERANGE_STARTDATE_SELECTED',
-                date: selected_date
+                type: eventName,
+                date: date
             });
-            console.log('event DATERANGE_STARTDATE_SELECTED thrown', selected_date);
+
+            // DEBUG
+            console.log('event thrown: ' + eventName, date);
+        },
+
+        publishStartDateSelected : function(target) {
+            var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
+            this.showJourney(date, defaults.journeyOutward);
+            this.publishDateSelected('DATERANGE_STARTDATE_SELECTED', date);
+        },
+
+        publishEndDateSelected : function(target) {
+            var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
+            this.showJourney(date, defaults.journeyReturn);
+            this.publishDateSelected('DATERANGE_ENDDATE_SELECTED', date);
+        },
+
+        showJourney : function(date, journeyType) {
+            var text = journeyType + ' ' + defaults.shortWeekDays[date.getDay()] +
+                        ' ' + date.getDate() + ' ' + defaults.shortMonths[date.getMonth()];
+            $('.' + classNames.journey).html(text);
         }
 
     };

@@ -1,3 +1,11 @@
+/* TODO - rely on Freak */
+.g-hidden {
+    display: none;
+}
+/* END TODO - rely on Freak */
+
+
+
 .dp-box {
     float: left;
     margin: 10px;
