@@ -42,7 +42,7 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             },
             all_files: [
-                'Gruntfile.js',
+                // 'Gruntfile.js',
                 'src/js/*.js'
                 // 'test/tests/*.js'
             ]
@@ -83,8 +83,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-regarde');
 
-    grunt.registerTask('default', ['uglify']);
-    // grunt.registerTask('default', ['test', 'uglify']);
+    grunt.registerTask('default', ['test', 'uglify']);
     grunt.registerTask('test', ['jshint', 'qunit']);
     grunt.registerTask('watcher', ['livereload-start', 'connect:livereload', 'regarde']);
 

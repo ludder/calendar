@@ -1,6 +1,8 @@
 /*global define*/
 define(function() {
 
+    'use strict';
+
     // returns date of tomorrow
     function nextDayDate(date) {
         return new Date(date.getYear(), date.getMonth(), date.getDate() + 1);

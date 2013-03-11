@@ -8,8 +8,8 @@ define([
     "use strict";
 
     // constants
-    var AY_MS = 1000 * 60 * 60 * 24,
-        today = new Date().setHours(0),
+    // var AY_MS = 1000 * 60 * 60 * 24,
+    var today = new Date().setHours(0),
         defaults = {
             range           : 1,
             startDate       : today,
@@ -21,7 +21,7 @@ define([
         compose = $utils.compose,
 
         // local reference to date functions
-        nextDayDate         = $date.nextDayDate,
+        // nextDayDate         = $date.nextDayDate,
         firstOfMonthWeekday = $date.firstOfMonthWeekday,
         lastOfMonth         = $date.lastOfMonth,
         yesterday           = $date.yesterday;
@@ -43,9 +43,9 @@ define([
     }
 
     // is date in last month
-    function isInLastMonth(newDate, formerDate) {
-        return (new Date(formerDate.getYear(), formerDate.getMonth()) < new Date(newDate.getYear(), newDate.getMonth()));
-    }
+    // function isInLastMonth(newDate, formerDate) {
+    //     return (new Date(formerDate.getYear(), formerDate.getMonth()) < new Date(newDate.getYear(), newDate.getMonth()));
+    // }
 
 
     Model.prototype = {
@@ -56,14 +56,9 @@ define([
             return (len && this.days[len - 1]);
         },
 
-        getLastDayOfMonth : function (date) {
-            var lastDay = new Date(date.getFullYear(), date.getMonth() +1, 0);
-            return lastDay;
-        },
-
         isLastDayOfMonth : function (date) {
-            var lastDay = this.getLastDayOfMonth(date);
-            return (date.getDate() === lastDay.getDate());
+            var lastDay = lastOfMonth(date).date;
+            return (date.getDate() === lastDay);
         },
 
         // find out if date is in range of optional min and max and thus is selectable
@@ -160,10 +155,10 @@ define([
             this.days = this.days.concat(this.createMonthDays(date));
         },
 
-        addNextMonth : function (date) {
-            var curLen = this.days.length,
-                last = this.days[curLen - 1];
-        },
+        // addNextMonth : function (date) {
+        //     var curLen = this.days.length,
+        //         last = this.days[curLen - 1];
+        // },
 
         createMonthRange : function () {
 
@@ -183,11 +178,11 @@ define([
             this.addPostMonth(copyStart); // ???
 
             return this.days;
-        },
-
-        appendMonthRange : function (nrMonths) {
-
         }
+
+        // appendMonthRange : function (nrMonths) {
+
+        // }
 
 
 

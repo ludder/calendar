@@ -1,5 +1,8 @@
 /*global define*/
 define(function () {
+
+    'use strict';
+
     function debug() {
         if (window.console) {
             console.log(arguments);

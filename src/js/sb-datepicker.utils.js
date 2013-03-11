@@ -1,5 +1,8 @@
 /*global define*/
 define(function () {
+
+    'use strict';
+
     function debug() {
         if (window.console) {
             console.log(arguments);
@@ -7,10 +10,10 @@ define(function () {
     }
 
     /* compose array after calling function x times, inserting x as argument, in both directions
-     * 
+     *
      * @param {number} nr of repeats
      * @param {function} callback function to call on each item
-     * @param {number} direction [optional] defaults to 1, -1 will count backwards, 
+     * @param {number} direction [optional] defaults to 1, -1 will count backwards,
      *      but returning array in order from small to big
      * @return {array} with modified parts
      */
