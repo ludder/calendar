@@ -107,14 +107,11 @@ define([
         */
         getPostMonth : function (date) {
             var lastdate     = lastOfMonth(date),
-                last         = lastdate.weektday,
+                last         = lastdate.weekday,
                 postFillDays = 6 - last,
                 nextMonth    = new Date(date.getFullYear(), date.getMonth() + 1);
 
-            var x = compose(postFillDays, this.createAddDay(nextMonth));
-            // TODO - broken?
-            // console.log(x);
-            return x;
+            return compose(postFillDays, this.createAddDay(nextMonth));
         },
 
         /* fill up month in grid before current month
