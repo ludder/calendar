@@ -55,8 +55,19 @@
 
             }
 
-            button.addEventListener('click', handleChange, false);
+            // button.addEventListener('click', handleChange, false);
+            listen('click', handleChange, button);
 
+            // Cross-browser implementation of element.addEventListener()
+
+            function listen(evnt, func, elem) {
+                if (elem.addEventListener) {
+                    elem.addEventListener(evnt,func,false);
+                } else if (elem.attachEvent) {
+                     var r = elem.attachEvent("on" + evnt, func);
+                    return r;
+                }
+            }
 
         </script>
     </body>

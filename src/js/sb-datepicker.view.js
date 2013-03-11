@@ -31,10 +31,9 @@ define(['lib/jquery'], function ($) {
         },
 
         events = {
-            daterange_startdate_selected : 'DATERANGE_STARTDATE_SELECTED',
-            daterange_enddate_selected   : 'DATERANGE_ENDDATE_SELECTED',
-            daterange_dates_cleared      : 'DATERANGE_DATES_CLEARED',
-            dp_box_closed                : 'DP_BOX_CLOSED'
+            daterange_startdate_selected : 'est:daterange_startdate_selected',
+            daterange_enddate_selected   : 'est:daterange_enddate_selected',
+            daterange_dates_cleared      : 'est:daterange_dates_cleared'
         },
 
 
@@ -146,9 +145,14 @@ define(['lib/jquery'], function ($) {
             // month days
             html += '<ul class="' + classNames.ul + '">';
 
-            monthArr.forEach(function (date) {
-                html += templates.day.replace(templReg, self.createRenderDay(date));
-            });
+            // $.each(monthArr, function (date) {
+            // monthArr.forEach(function (date, index) {
+            //     html += templates.day.replace(templReg, self.createRenderDay(date));
+            // });
+            for (var i=0; i<monthArr.length; i++) {
+                // console.log(monthArr[i], i);
+                html += templates.day.replace(templReg, self.createRenderDay(monthArr[i], i));
+            }
 
             html += '</ul>';
 
@@ -167,7 +171,7 @@ define(['lib/jquery'], function ($) {
             self.$selectedStart = $parentNode;
             self.$selectedStart.addClass(classNames.selectedFirst);
 
-            $nexts = $parentNode.nextAll(); //':not(.' + classNames.selectable + ')'),
+            $nexts = $parentNode.nextAll();
             $nexts.on('mouseenter.calendarhover mouseleave.calendarhover', '.' + classNames.selectable, function (e) {
                 self.handleHoverEvent(e.type, self, this.parentNode);
             });
@@ -273,10 +277,10 @@ define(['lib/jquery'], function ($) {
         },
 
         publish : function(obj) {
-            $("body").trigger(obj);
+            $(this).trigger(obj);
 
             // DEBUG
-            console.log('event thrown: ' + obj);
+            // console.log('event thrown: ' + obj);
         },
 
         publishDateSelected : function(eventName, date) {

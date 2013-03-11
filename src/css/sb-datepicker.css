@@ -72,28 +72,29 @@
     text-decoration: none;
 }
 
-.dp li a.dp-firstweek {
+.dp-firstweek {
     border-top-width: 2px;
     border-top-color: #000;
     padding-top: 0;
 }
 
-.dp li a.dp-selectable:hover {
+.dp-selectable:hover {
     background: #00A1DE;
     color: #fff;
 }
 
-.dp li a.dp-selectable {
-    color: #00A1DE;
+.dp-selectable {
+    color: #006;
 }
 
-.dp li a.dp-disabled:hover {
+.dp-disabled:hover {
     background: #fff;
     color: #999;
 }
 
 .dp-wdays span {
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     border-right: 1px solid #999;
 
     line-height: 30px;
@@ -111,6 +112,7 @@
 
     background: #dbdbdb;
     box-sizing: border-box;
+    -moz-box-sizing: border-box;
     border-bottom: 1px solid #999;
 
     padding: 0 0 2px 6px;
@@ -121,13 +123,18 @@
     line-height: 1.2em;
 }
 
-.dp-disabled {
+.dp-disabled a {
     color: #999;
     cursor: default;
 }
 
-.dp-mo-range,
-.dp-selected-start {
-    background: #000;
+.dp-mo-range a,
+.dp-selected-start a {
+    background: #00A1DE;
     color: #fff;
+}
+.dp-disabled.dp-mo-range a,
+.dp-disabled.dp-selected-start a {
+    background: #fff;
+    color: #999;
 }
