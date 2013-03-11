@@ -64,6 +64,10 @@ module.exports = function (grunt) {
                 files: '**/*.html',
                 tasks: ['livereload']
             },
+            css: {
+                files: '**/*.css',
+                tasks: ['livereload']
+            },
             js: {
                 files: 'src/**/*.js',
                 tasks: ['livereload']

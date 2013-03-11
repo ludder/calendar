@@ -56,6 +56,16 @@ define([
             return (len && this.days[len - 1]);
         },
 
+        getLastDayOfMonth : function (date) {
+            var lastDay = new Date(date.getFullYear(), date.getMonth() +1, 0);
+            return lastDay;
+        },
+
+        isLastDayOfMonth : function (date) {
+            var lastDay = this.getLastDayOfMonth(date);
+            return (date.getDate() === lastDay.getDate());
+        },
+
         // find out if date is in range of optional min and max and thus is selectable
         isInRange : function (date) {
             return (date >= this.options.minDate && date <= this.options.maxDate);
@@ -77,10 +87,11 @@ define([
         */
         addDay : function (date) {
             return {
-                "date"          : date,
-                "selectable"    : this.isInRange(date),
-                "disabled"      : this.isDisabled(date),
-                "firstweek"     : this.isFirstWeek(date)
+                "date"           : date,
+                "selectable"     : this.isInRange(date),
+                "disabled"       : this.isDisabled(date),
+                "firstweek"      : this.isFirstWeek(date),
+                "lastdayofmonth" : this.isLastDayOfMonth(date)
             };
         },
 

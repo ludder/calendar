@@ -20,13 +20,14 @@ define(['lib/jquery'], function ($) {
 
             journey  : 'dp-journey',
 
-            selectable    : 'dp-selectable',
-            disabled      : 'dp-disabled',
-            firstweek     : 'dp-firstweek',
+            selectable     : 'dp-selectable',
+            disabled       : 'dp-disabled',
+            firstweek      : 'dp-firstweek',
+            lastdayofmonth : 'dp-lastdayofmonth',
 
-            selectedFirst : 'dp-selected-start',
-            selectedLast  : 'dp-selected-end',
-            range         : 'dp-mo-range'
+            selectedFirst  : 'dp-selected-start',
+            selectedLast   : 'dp-selected-end',
+            range          : 'dp-mo-range'
         },
 
         events = {
@@ -38,7 +39,8 @@ define(['lib/jquery'], function ($) {
 
 
         templates = {
-            day      : '<li><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
+            day      : '<li class="${disabled} ${lastdayofmonth}"><a data-msdate="${msdate}" href="#" class="${selectable} ${firstweek}">${date}</a></li>',
+            // day      : '<li class="${lastdayofmonth}"><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
             month    : '<span class="' + classNames.month + '">${month}</span>',
 
@@ -115,6 +117,8 @@ define(['lib/jquery'], function ($) {
                 return (prop && classNames[s] || '');
             case 'firstweek':
                 return (prop && classNames[s] || '');
+            case 'lastdayofmonth':
+                return (prop && classNames[s] || '');
             default:
                 return prop;
             }
@@ -156,13 +160,6 @@ define(['lib/jquery'], function ($) {
 
         },
 
-        selectDay : function(date, classnames) {
-            ///////////////////
-            // HIER GEBLEVEN //
-            ///////////////////
-            // Make day selectable from month selections => there's no actual click event
-        },
-
         selectStartDate : function(self, target) {
             var $nexts;
             var $parentNode = $(target.parentNode);
@@ -199,16 +196,22 @@ define(['lib/jquery'], function ($) {
 
         setEventSelectMonth : function(self) {
             self.$datepicker.on('click', '.' + classNames.month, function (e) {
-                var firstDay, lastDay, selectedMonth;
-                firstDay = new Date(parseInt(e.target.parentNode.getAttribute('data-msdate'), 10));
-                lastDay = new Date(firstDay.getFullYear(), firstDay.getMonth() +1, 0);
-                selectedMonth = firstDay.getMonth();
+
+                var firstDay, lastDay;
+                e.stopPropagation();
+
+                firstDay = e.target.parentNode;
+                lastDay = $(firstDay.parentNode).nextAll('.' + classNames.lastdayofmonth + ':first').find('a').get(0);
 
                 // Clear selected dates
-                self.clearSelectedDates(self, this.parentNode);
-                // Select first day of month
-                // Select last day day of month and all days in between
-                console.log(e.target, e.target.parentNode);
+                self.clearSelectedDates(self, firstDay.parentNode);
+
+                // Select first and last day of month
+                self.selectStartDate(self, firstDay);
+                self.selectEndDate(self, lastDay);
+
+                // Select all in between days
+                $(lastDay.parentNode).prevUntil(self.$selectedStart).andSelf().addClass(classNames.range);
             });
         },
 
@@ -217,7 +220,7 @@ define(['lib/jquery'], function ($) {
             self.$selectedEnd   = null;
 
             var classnames = classNames.range + ' ' + classNames.selectedFirst + ' ' + classNames.selectedLast;
-            $(parent.parentNode).children().removeClass(classnames);
+            $(parent).siblings().removeClass(classnames);
         },
 
         initEvents : function () {
