@@ -150,7 +150,6 @@ define(['lib/jquery'], function ($) {
             //     html += templates.day.replace(templReg, self.createRenderDay(date));
             // });
             for (var i=0; i<monthArr.length; i++) {
-                // console.log(monthArr[i], i);
                 html += templates.day.replace(templReg, self.createRenderDay(monthArr[i], i));
             }
 

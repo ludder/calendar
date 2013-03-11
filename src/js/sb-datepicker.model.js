@@ -163,10 +163,10 @@ define([
         addNextMonth : function (date) {
             var curLen = this.days.length,
                 last = this.days[curLen - 1];
-            console.log(last);
         },
 
         createMonthRange : function () {
+
             var i,
                 tmpDate,
                 copyStart = new Date(this.options.startDate.getTime()),
