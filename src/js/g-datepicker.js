@@ -1,5 +1,5 @@
 /*global define*/
-define(['js/sb-datepicker.controller'], function (Controller) {
+define(['js/g-datepicker.controller'], function (Controller) {
 
 	'use strict';
 

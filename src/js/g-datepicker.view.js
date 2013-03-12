@@ -4,7 +4,7 @@ define(['lib/jquery'], function ($) {
     'use strict';
 
     var defaults = {
-        // TODO - how to i18n?
+        // TODO - i18n!
             shortMonths    : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
             shortWeekDays  : ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
             journeyOutward : 'Heenreis:',
@@ -12,22 +12,20 @@ define(['lib/jquery'], function ($) {
         },
 
         classNames = {
-            wrapper  : 'dp-datepicker',
-            ul       : 'dp',
-            year     : 'dp-year',
-            month    : 'dp-month',
-            weekDays : 'dp-wdays',
+            wrapper  : 'g-dp-datepicker',
+            ul       : 'g-dp',
+            year     : 'g-dp-year',
+            month    : 'g-dp-month',
+            weekDays : 'g-dp-wdays',
 
-            journey  : 'dp-journey',
+            selectable     : 'g-dp-selectable',
+            disabled       : 'g-dp-disabled',
+            firstweek      : 'g-dp-firstweek',
+            lastdayofmonth : 'g-dp-lastdayofmonth',
 
-            selectable     : 'dp-selectable',
-            disabled       : 'dp-disabled',
-            firstweek      : 'dp-firstweek',
-            lastdayofmonth : 'dp-lastdayofmonth',
-
-            selectedFirst  : 'dp-selected-start',
-            selectedLast   : 'dp-selected-end',
-            range          : 'dp-mo-range'
+            selectedFirst  : 'g-dp-selected-start',
+            selectedLast   : 'g-dp-selected-end',
+            range          : 'g-dp-mo-range'
         },
 
         events = {

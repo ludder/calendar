@@ -1,4 +1,4 @@
-/*! daterangepicker - v0.1.0 - 2013-03-11 04:03 */ 
+/*! daterangepicker - v0.2.0 - 2013-03-12 10:03 */ 
 define(function() {
     "use strict";
     function e() {
@@ -13,7 +13,7 @@ define(function() {
         debug: e,
         loop: t
     };
-}), define([ "lib/jquery", "js/sb-datepicker.utils", "js/sb-datepicker.model", "js/sb-datepicker.view" ], function(e, t, n, a) {
+}), define([ "lib/jquery", "js/g-datepicker.utils", "js/g-datepicker.model", "js/g-datepicker.view" ], function(e, t, n, a) {
     "use strict";
     function s(e) {
         this.options = e, this.model = new n(this.options), this.view = new a(this.options), 
@@ -70,14 +70,14 @@ define(function() {
         lastOfMonth: a,
         yesterday: s
     };
-}), define([ "js/sb-datepicker.controller" ], function(e) {
+}), define([ "js/g-datepicker.controller" ], function(e) {
     "use strict";
     return {
         init: function(t) {
             return e.init(t);
         }
     };
-}), define([ "lib/jquery", "js/sb-datepicker.utils", "js/sb-datepicker.date" ], function(e, t, n) {
+}), define([ "lib/jquery", "js/g-datepicker.utils", "js/g-datepicker.date" ], function(e, t, n) {
     "use strict";
     function a(t) {
         this.options = e.extend({}, r, t), this.today = s, this.days = [];
@@ -122,8 +122,8 @@ define(function() {
             };
         },
         getPostMonth: function(e) {
-            var t = d(e), n = t.weektday, a = 6 - n, s = new Date(e.getFullYear(), e.getMonth() + 1), r = i(a, this.createAddDay(s));
-            return r;
+            var t = d(e), n = t.weekday, a = 6 - n, s = new Date(e.getFullYear(), e.getMonth() + 1);
+            return i(a, this.createAddDay(s));
         },
         getPreMonth: function(e) {
             var t = o(e);
@@ -175,19 +175,18 @@ define(function() {
         journeyOutward: "Heenreis:",
         journeyReturn: "Terugreis:"
     }, a = {
-        wrapper: "dp-datepicker",
-        ul: "dp",
-        year: "dp-year",
-        month: "dp-month",
-        weekDays: "dp-wdays",
-        journey: "dp-journey",
-        selectable: "dp-selectable",
-        disabled: "dp-disabled",
-        firstweek: "dp-firstweek",
-        lastdayofmonth: "dp-lastdayofmonth",
-        selectedFirst: "dp-selected-start",
-        selectedLast: "dp-selected-end",
-        range: "dp-mo-range"
+        wrapper: "g-dp-datepicker",
+        ul: "g-dp",
+        year: "g-dp-year",
+        month: "g-dp-month",
+        weekDays: "g-dp-wdays",
+        selectable: "g-dp-selectable",
+        disabled: "g-dp-disabled",
+        firstweek: "g-dp-firstweek",
+        lastdayofmonth: "g-dp-lastdayofmonth",
+        selectedFirst: "g-dp-selected-start",
+        selectedLast: "g-dp-selected-end",
+        range: "g-dp-mo-range"
     }, s = {
         daterange_startdate_selected: "est:daterange_startdate_selected",
         daterange_enddate_selected: "est:daterange_enddate_selected",

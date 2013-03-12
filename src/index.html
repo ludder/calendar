@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Datepicker</title>
-        <link rel="stylesheet" href="css/sb-datepicker.css" />
+        <link rel="stylesheet" href="css/g-datepicker.css" />
         <style>
             p {
                 overflow: hidden;
@@ -24,7 +24,7 @@
             <button id="showcal" type="submit">Render calendar</button>
             <div id="result"></div>
         </p>
-        <div id="datepicker" class="dp-box"></div>
+        <div id="datepicker" class="g-dp-box"></div>
 
 
         <script src="lib/require.js"></script>
@@ -46,7 +46,7 @@
                 var iDate = new Date(date[0], date[1], date[2]);
 
                 // create datepicker configured by input fields
-                require(['js/sb-datepicker.js'], function ($dp) {
+                require(['js/g-datepicker.js'], function ($dp) {
                     $dp.init({
                         startDate   : iDate,
                         range       : range,

@@ -2,7 +2,7 @@
 
 QUnit.config.autostart = false;
 
-require(['js/sb-datepicker.model'], function (Model) {
+require(['js/g-datepicker.model'], function (Model) {
 
     'use strict';
 

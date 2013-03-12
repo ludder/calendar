@@ -1,8 +1,8 @@
 /*global define */
 define([
     'lib/jquery',
-    'js/sb-datepicker.utils',
-    'js/sb-datepicker.date'
+    'js/g-datepicker.utils',
+    'js/g-datepicker.date'
 ], function ($, $utils, $date) {
 
     "use strict";
