@@ -55,7 +55,7 @@ define(['lib/jquery'], function ($) {
 
             year    : '<div class="' + classNames.year + '">${year}</div>',
 
-            journey : '<div class="' + classNames.journey + '">' + defaults.journeyOutward + '</div>',
+            journey : '<div class="' + classNames.journey + '"><strong>' + defaults.journeyOutward + '</strong></div>',
 
             wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
         },
@@ -222,7 +222,7 @@ define(['lib/jquery'], function ($) {
         },
 
         selectInBetweenDays : function(self) {
-            $(self.$selectedEnd).prevUntil(self.$selectedStart).andSelf().addClass(classNames.range);
+            $(self.$selectedEnd).prevUntil(self.$selectedStart).addClass(classNames.range);
         },
 
         clearSelectedDates : function(self, parent) {
@@ -249,6 +249,7 @@ define(['lib/jquery'], function ($) {
             var $container = this.$container;
             if ($container.find('.' + classNames.firstselecteddate) && $container.find('.' + classNames.lastselecteddate)) {
                 self.$selectedStart = $container.find('.' + classNames.firstselecteddate);
+                // console.log(self.$selectedStart.offset().top);
                 self.$selectedEnd = $container.find('.' + classNames.lastselecteddate);
                 self.selectInBetweenDays(self);
             }
@@ -277,7 +278,7 @@ define(['lib/jquery'], function ($) {
         },
 
         handleHoverEvent: function(eventType, self, parentNode) {
-            var $prev = $(parentNode).prevUntil(self.$selectedStart).andSelf(),
+            var $prev = $(parentNode).prevUntil(self.$selectedStart),
                 len = $prev.length;
 
             if (eventType === 'mouseleave') {
@@ -333,7 +334,7 @@ define(['lib/jquery'], function ($) {
         },
 
         showJourney : function(date, journeyType) {
-            var text = journeyType + ' ' + defaults.shortWeekDays[date.getDay()] +
+            var text = '<strong>' + journeyType + '</strong> ' + defaults.shortWeekDays[date.getDay()] +
                         ' ' + date.getDate() + ' ' + defaults.shortMonths[date.getMonth()];
             $('.' + classNames.journey).html(text);
         }

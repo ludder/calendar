@@ -25,8 +25,8 @@
 
             <hr>
 
-            <label for="">Outbound<input type="text" id="outbounddate" value="2013, 5, 29"></label>
-            <label for="">Return<input type="text" id="returndate" value="2013, 6, 2"></label>
+            <label for="">Outbound <input type="text" id="outbounddate" value="2013, 5, 29"></label>
+            <label for="">Return <input type="text" id="returndate" value="2013, 6, 2"></label>
 
             <div id="result"></div>
         </p>
@@ -42,18 +42,6 @@
                 outbounddate = document.getElementById('outbounddate'),
                 returndate   = document.getElementById('returndate');
 
-
-            function getDateValue(value) {
-                if (value !== null) {
-                    value = value.split(',');
-                    if (value.length > 2) {
-                        return new Date(value[0], value[1], value[2]);
-                    } else {
-                        return null;
-                    }
-                }
-            }
-
             function handleChange(e) {
                 var date         = getDateValue(dateInput.value),
                     outboundDate = getDateValue(outbounddate.value),
@@ -64,6 +52,7 @@
                 require(['js/g-datepicker.js'], function ($dp) {
 
                     if (outboundDate && returnDate) {
+                        // Outbound and return date are known
                         $dp.init({
                             startDate         : date,
                             firstSelectedDate : outboundDate,
@@ -73,6 +62,7 @@
                             resultId          : 'result'
                         });
                     } else {
+                        // Clean daterange picker
                         $dp.init({
                             startDate         : date,
                             range             : range,
@@ -100,6 +90,16 @@
                 }
             }
 
+            function getDateValue(value) {
+                if (value !== null) {
+                    value = value.split(',');
+                    if (value.length > 2) {
+                        return new Date(value[0], value[1], value[2]);
+                    } else {
+                        return null;
+                    }
+                }
+            }
         </script>
     </body>
 </html>
