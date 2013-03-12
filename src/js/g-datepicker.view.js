@@ -14,7 +14,6 @@ define(['lib/jquery'], function ($) {
         classNames = {
             wrapper  : 'g-dp-datepicker',
             ul       : 'g-dp',
-            year     : 'g-dp-year',
             month    : 'g-dp-month',
             weekDays : 'g-dp-wdays',
 
@@ -53,8 +52,6 @@ define(['lib/jquery'], function ($) {
                         '<span>' + defaults.shortWeekDays[6] + '</span>' +
                         '</div>',
 
-            year    : '<div class="' + classNames.year + '">${year}</div>',
-
             journey : '<div class="' + classNames.journey + '"><strong>' + defaults.journeyOutward + '</strong></div>',
 
             wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
@@ -86,14 +83,6 @@ define(['lib/jquery'], function ($) {
 
         renderJourney : function () {
             return templates.journey;
-        },
-
-        renderYear : function (date) {
-            date = date || new Date();
-
-            var year = date.getFullYear();
-
-            return templates.year.replace(templReg, year);
         },
 
         renderMonth : function (monthIndex) {
@@ -137,7 +126,7 @@ define(['lib/jquery'], function ($) {
 
         render : function (days) {
             var self = this,
-                html = this.renderYear(days[0] && days[0].date),
+                html = '',
                 monthArr = days;
 
             // render journey header
