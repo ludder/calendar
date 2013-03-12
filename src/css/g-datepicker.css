@@ -129,7 +129,8 @@
 }
 
 .g-dp-mo-range a,
-.g-dp-selected-start a {
+.g-dp-selected-start a,
+.g-dp-selected-end a {
     background: #00A1DE;
     color: #fff;
 }

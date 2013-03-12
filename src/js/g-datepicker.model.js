@@ -77,16 +77,34 @@ define([
             return (date.getDate() <= 7);
         },
 
+        isFirstSelectedDate : function (date) {
+            if (this.options.firstSelectedDate !== null) {
+                return (Date.parse(date) === Date.parse(this.options.firstSelectedDate));
+            } else {
+                return false;
+            }
+        },
+
+        isLastSelectedDate : function (date) {
+            if (this.options.lastSelectedDate !== null) {
+                return (Date.parse(date) === Date.parse(this.options.lastSelectedDate));
+            } else {
+                return false;
+            }
+        },
+
         /* create day model
         * @param {date} date object
         */
         addDay : function (date) {
             return {
-                "date"           : date,
-                "selectable"     : this.isInRange(date),
-                "disabled"       : this.isDisabled(date),
-                "firstweek"      : this.isFirstWeek(date),
-                "lastdayofmonth" : this.isLastDayOfMonth(date)
+                "date"              : date,
+                "firstselecteddate" : this.isFirstSelectedDate(date),
+                "lastselecteddate"  : this.isLastSelectedDate(date),
+                "selectable"        : this.isInRange(date),
+                "disabled"          : this.isDisabled(date),
+                "firstweek"         : this.isFirstWeek(date),
+                "lastdayofmonth"    : this.isLastDayOfMonth(date)
             };
         },
 

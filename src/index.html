@@ -22,6 +22,12 @@
             <input id="date" value="2013, 5, 5" />
             <input id="range" value="2" />
             <button id="showcal" type="submit">Render calendar</button>
+
+            <hr>
+
+            <label for="">Outbound<input type="text" id="outbounddate" value="2013, 5, 29"></label>
+            <label for="">Return<input type="text" id="returndate" value="2013, 6, 2"></label>
+
             <div id="result"></div>
         </p>
         <div id="datepicker" class="g-dp-box"></div>
@@ -30,29 +36,51 @@
         <script src="lib/require.js"></script>
         <script>
 
+            var button       = document.getElementById('showcal'),
+                dateInput    = document.getElementById('date'),
+                rangeInput   = document.getElementById('range'),
+                outbounddate = document.getElementById('outbounddate'),
+                returndate   = document.getElementById('returndate');
 
-            // var button     = document.querySelector('#showcal'),
-            //     dateInput  = document.querySelector('#date'),
-            //     rangeInput = document.querySelector('#range');
-            var button     = document.getElementById('showcal'),
-                dateInput  = document.getElementById('date'),
-                rangeInput = document.getElementById('range');
 
+            function getDateValue(value) {
+                if (value !== null) {
+                    value = value.split(',');
+                    if (value.length > 2) {
+                        return new Date(value[0], value[1], value[2]);
+                    } else {
+                        return null;
+                    }
+                }
+            }
 
             function handleChange(e) {
-                var date = dateInput.value.split(','),
-                    range = rangeInput.value;
-
-                var iDate = new Date(date[0], date[1], date[2]);
+                var date         = getDateValue(dateInput.value),
+                    outboundDate = getDateValue(outbounddate.value),
+                    returnDate   = getDateValue(returndate.value),
+                    range        = rangeInput.value;
 
                 // create datepicker configured by input fields
                 require(['js/g-datepicker.js'], function ($dp) {
-                    $dp.init({
-                        startDate   : iDate,
-                        range       : range,
-                        containerId : 'datepicker',
-                        resultId    : 'result'
-                    });
+
+                    if (outboundDate && returnDate) {
+                        $dp.init({
+                            startDate         : date,
+                            firstSelectedDate : outboundDate,
+                            lastSelectedDate  : returnDate,
+                            range             : range,
+                            containerId       : 'datepicker',
+                            resultId          : 'result'
+                        });
+                    } else {
+                        $dp.init({
+                            startDate         : date,
+                            range             : range,
+                            containerId       : 'datepicker',
+                            resultId          : 'result'
+                        });
+                    }
+
                 });
 
 

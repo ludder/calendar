@@ -15,18 +15,19 @@ define([
 
         this.options = options;
 
-        this.model = new Model(this.options);
+        this.model   = new Model(this.options);
 
-        this.view = new View(this.options);
+        this.view    = new View(this.options);
 
-        this.days= [];
+        this.days    = [];
     }
 
     Controller.prototype = {
 
-        init    : function () {
+        init : function () {
             this.createMonths();
             this.render();
+            this.selectDays();
 
             this.initEvents();
         },
@@ -37,6 +38,10 @@ define([
 
         render : function () {
             this.view.render(this.days);
+        },
+
+        selectDays : function () {
+            this.view.selectDays();
         },
 
         addMonth : function () {},
