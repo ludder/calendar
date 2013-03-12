@@ -15,6 +15,7 @@ define(['lib/jquery'], function ($) {
             wrapper  : 'g-dp-datepicker',
             ul       : 'g-dp',
             month    : 'g-dp-month',
+            journey    : 'g-dp-journey',
             weekDays : 'g-dp-wdays',
 
             selectable        : 'g-dp-selectable',

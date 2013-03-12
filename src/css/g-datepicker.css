@@ -129,6 +129,11 @@
     font-size: 0.7em;
 }
 
+.g-dp-journey {
+    color: #005B82;
+    padding: 10px;
+}
+
 .g-dp-disabled a {
     color: #999;
     cursor: default;
