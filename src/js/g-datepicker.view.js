@@ -238,10 +238,14 @@ define(['lib/jquery'], function ($) {
             var self = this;
             var $container = this.$container;
             if ($container.find('.' + classNames.firstselecteddate) && $container.find('.' + classNames.lastselecteddate)) {
+                
                 self.$selectedStart = $container.find('.' + classNames.firstselecteddate);
-                // console.log(self.$selectedStart.offset().top);
                 self.$selectedEnd = $container.find('.' + classNames.lastselecteddate);
                 self.selectInBetweenDays(self);
+
+                // Scroll to first selected day
+                var newTop = self.$selectedStart.position().top -20;
+                self.$container.find('.' + classNames.ul).animate({'scrollTop': newTop}, 800);
             }
         },
 
