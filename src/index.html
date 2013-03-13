@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Datepicker</title>
-        <link rel="stylesheet" href="css/g-datepicker.css" />
+        <link rel="stylesheet" href="css/DateRangePicker.css" />
         <style>
             p {
                 overflow: hidden;
@@ -30,7 +30,7 @@
 
             <div id="result"></div>
         </p>
-        <div id="datepicker" class="g-dp-box"></div>
+        <div id="datepicker" class="est-dp-box"></div>
 
 
         <script src="lib/require.js"></script>
@@ -49,7 +49,7 @@
                     range        = rangeInput.value;
 
                 // create datepicker configured by input fields
-                require(['js/g-datepicker.js'], function ($dp) {
+                require(['js/DateRangePicker.js'], function ($dp) {
 
                     if (outboundDate && returnDate) {
                         // Outbound and return date are known

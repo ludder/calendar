@@ -1,12 +1,12 @@
 /* TODO - rely on Freak */
-.g-hidden {
+.est-hidden {
     display: none;
 }
 /* END TODO - rely on Freak */
 
 
 
-.g-dp-box {
+.est-dp-box {
     float: left;
     margin: 10px;
     width: 420px;
@@ -20,12 +20,12 @@
     font-family: verdana;
 }
 
-.g-dp-box * {
+.est-dp-box * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
 
-.g-dp {
+.est-dp {
     border: 1px solid #999;
     border-width: 0 1px 1px 1px;
 
@@ -44,13 +44,13 @@
     list-style: none;
 }
 
-.g-dp-year {
+.est-dp-year {
     width: 100%;
     padding: 5px 0;
     text-align: center;
 }
 
-.g-dp-wdays {
+.est-dp-wdays {
     border: 1px solid #A2DDF3;
     border-width: 1px 0;
     overflow: auto;
@@ -58,7 +58,7 @@
     padding-top: 8px;
 }
 
-.g-dp-box .g-dp-wdays span {
+.est-dp-box .est-dp-wdays span {
     border: none;
     font-size: .9em;
     font-weight: bold;
@@ -66,15 +66,15 @@
     text-align: center;
 }
 
-.g-dp-wdays span,
-.g-dp li {
+.est-dp-wdays span,
+.est-dp li {
     float: left;
     /*width: 14.286%;*/
     width: 40px;
     height: 40px;
 }
 
-.g-dp li a {
+.est-dp li a {
     position: relative;
 
     display: inline-block;
@@ -93,34 +93,34 @@
 }
 
 
-.g-dp .g-dp-firstweek {
+.est-dp .est-dp-firstweek {
     border-top-color: #005879;
 }
 
-.g-dp .g-dp-lastdayofmonth a {
+.est-dp .est-dp-lastdayofmonth a {
     border-right-color: #005879;
 }
 
-.g-dp .g-dp-lastdayofmonth + li a {
+.est-dp .est-dp-lastdayofmonth + li a {
     padding-top: 17px;
 }
 
-.g-dp-selectable:hover {
+.est-dp-selectable:hover {
     background: #00A1DE;
     color: #fff;
 }
 
-.g-dp-selectable {
+.est-dp-selectable {
     color: #006;
 }
 
-.g-dp-disabled:hover {
+.est-dp-disabled:hover {
     background: #fff;
     color: #999;
 }
 
-.g-dp li a:hover .g-dp-month,
-.g-dp-month {
+.est-dp li a:hover .est-dp-month,
+.est-dp-month {
     position: absolute;
     top: 2px;
     left: 0;
@@ -132,35 +132,35 @@
     font-size: 0.7em;
 }
 
-.g-dp-journey {
+.est-dp-journey {
     color: #005B82;
     padding: 10px;
 }
 
-.g-dp-disabled a {
+.est-dp-disabled a {
     color: #999;
     cursor: default;
 }
 
-.g-dp .g-dp-selected-start a,
-.g-dp .g-dp-selected-start a span,
-.g-dp .g-dp-selected-end a,
-.g-dp .g-dp-selected-end a span {
+.est-dp .est-dp-selected-start a,
+.est-dp .est-dp-selected-start a span,
+.est-dp .est-dp-selected-end a,
+.est-dp .est-dp-selected-end a span {
     background: #0075A1;
     border-color: #005879;
     color: #fff;
 }
-.g-dp-selected-start a:hover,
-.g-dp-selected-end a:hover {
+.est-dp-selected-start a:hover,
+.est-dp-selected-end a:hover {
     background: #005879;
 }
-.g-dp-mo-range a,
-.g-dp-mo-range a span {
+.est-dp-mo-range a,
+.est-dp-mo-range a span {
     background: #00A1DE;
     color: #fff;
 }
-.g-dp-disabled.g-dp-mo-range a,
-.g-dp-disabled.g-dp-selected-start a {
+.est-dp-disabled.est-dp-mo-range a,
+.est-dp-disabled.est-dp-selected-start a {
     background: #fff;
     color: #999;
 }

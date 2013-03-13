@@ -12,22 +12,22 @@ define(['lib/jquery'], function ($) {
         },
 
         classNames = {
-            wrapper  : 'g-dp-datepicker',
-            ul       : 'g-dp',
-            month    : 'g-dp-month',
-            journey    : 'g-dp-journey',
-            weekDays : 'g-dp-wdays',
+            wrapper  : 'est-dp-datepicker',
+            ul       : 'est-dp',
+            month    : 'est-dp-month',
+            journey    : 'est-dp-journey',
+            weekDays : 'est-dp-wdays',
 
-            selectable        : 'g-dp-selectable',
-            disabled          : 'g-dp-disabled',
-            firstweek         : 'g-dp-firstweek',
-            lastdayofmonth    : 'g-dp-lastdayofmonth',
+            selectable        : 'est-dp-selectable',
+            disabled          : 'est-dp-disabled',
+            firstweek         : 'est-dp-firstweek',
+            lastdayofmonth    : 'est-dp-lastdayofmonth',
 
-            firstselecteddate : 'g-dp-selected-start',
-            lastselecteddate  : 'g-dp-selected-end',
-            selectedFirst     : 'g-dp-selected-start',
-            selectedLast      : 'g-dp-selected-end',
-            range             : 'g-dp-mo-range'
+            firstselecteddate : 'est-dp-selected-start',
+            lastselecteddate  : 'est-dp-selected-end',
+            selectedFirst     : 'est-dp-selected-start',
+            selectedLast      : 'est-dp-selected-end',
+            range             : 'est-dp-mo-range'
         },
 
         events = {

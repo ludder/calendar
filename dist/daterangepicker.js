@@ -176,17 +176,17 @@ define(function() {
         journeyReturn: "Terugreis:"
     }, a = {
         wrapper: "g-dp-datepicker",
-        ul: "g-dp",
-        year: "g-dp-year",
-        month: "g-dp-month",
-        weekDays: "g-dp-wdays",
-        selectable: "g-dp-selectable",
-        disabled: "g-dp-disabled",
-        firstweek: "g-dp-firstweek",
-        lastdayofmonth: "g-dp-lastdayofmonth",
-        selectedFirst: "g-dp-selected-start",
-        selectedLast: "g-dp-selected-end",
-        range: "g-dp-mo-range"
+        ul: "est-dp",
+        year: "est-dp-year",
+        month: "est-dp-month",
+        weekDays: "est-dp-wdays",
+        selectable: "est-dp-selectable",
+        disabled: "est-dp-disabled",
+        firstweek: "est-dp-firstweek",
+        lastdayofmonth: "est-dp-lastdayofmonth",
+        selectedFirst: "est-dp-selected-start",
+        selectedLast: "est-dp-selected-end",
+        range: "est-dp-mo-range"
     }, s = {
         daterange_startdate_selected: "est:daterange_startdate_selected",
         daterange_enddate_selected: "est:daterange_enddate_selected",
