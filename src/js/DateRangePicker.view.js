@@ -66,9 +66,7 @@ define(['lib/jquery'], function ($) {
 
         this.months = options.months || defaults.shortMonths;
 
-        this.$container = typeof options.containerId === 'string' ?
-                $('#' + options.containerId) :
-                $('body');
+        this.$container = $(options.selector);
 
         this.$result = $('#' + options.resultId);
     }
