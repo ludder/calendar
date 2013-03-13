@@ -264,7 +264,8 @@ define(['lib/jquery'], function ($) {
             if ($container.find('.' + classNames.firstselecteddate) && $container.find('.' + classNames.lastselecteddate)) {
 
                 self.$selectedStart = $container.find('.' + classNames.firstselecteddate);
-                self.$selectedEnd = $container.find('.' + classNames.lastselecteddate);
+                self.$selectedEnd   = $container.find('.' + classNames.lastselecteddate);
+
                 self.selectInBetweenDays(self);
 
                 // Scroll to first selected day

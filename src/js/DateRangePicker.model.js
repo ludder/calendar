@@ -22,6 +22,7 @@ define([
 
         // local reference to date functions
         // nextDayDate         = $date.nextDayDate,
+        addDays             = $date.addDays,
         firstOfMonthWeekday = $date.firstOfMonthWeekday,
         lastOfMonth         = $date.lastOfMonth,
         yesterday           = $date.yesterday;
@@ -124,6 +125,7 @@ define([
         * @return {array} array of days after this month to fill up grid
         */
         getPostMonth : function (date) {
+
             var lastdate     = lastOfMonth(date),
                 last         = lastdate.weekday,
                 postFillDays = 6 - last,
@@ -180,19 +182,46 @@ define([
             var i,
                 tmpDate,
                 copyStart = new Date(this.options.startDate.getTime()),
-                curMonth = copyStart.getMonth(),
-                loops = this.options.range;
+                curMonth  = copyStart.getMonth(),
+                loops     = this.getMonthsInRange(copyStart, this.options.range);
 
             this.addPreMonth(copyStart);
 
             for (i = 0; i < loops; i += 1) {
-                tmpDate = new Date(copyStart.setMonth(curMonth + i));
+                tmpDate = this.addMonthsToDate(copyStart, curMonth + i);
                 this.addMonth(tmpDate);
             }
 
-            this.addPostMonth(copyStart); // ???
+            this.addPostMonth(tmpDate);
 
             return this.days;
+        },
+
+        getMonthsInRange : function(startdate, days) {
+            // Get number of months in day range
+            var curYear        = startdate.getFullYear(),
+                lastdayinrange = addDays(startdate, days),
+                lastMonth      = lastdayinrange.getMonth(),
+                lastYear       = lastdayinrange.getFullYear();
+
+            lastMonth     += (lastYear - curYear) * 12;
+            return lastMonth;
+        },
+
+        addMonthsToDate : function (startdate, months) {
+            var date  = new Date(startdate.getTime()),
+                year  = date.getFullYear(),
+                month = months;
+
+            if (months > 11) {
+                year  = year + (Math.floor((months + 1) / 12));
+                month = months - (year * 12);
+            }
+
+            date.setMonth(month);
+            date.setYear(year);
+
+            return new Date(date);
         }
 
         // appendMonthRange : function (nrMonths) {

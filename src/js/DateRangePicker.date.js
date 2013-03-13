@@ -39,11 +39,16 @@ define(function() {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1);
     }
 
+    function addDays(date, days) {
+        return new Date( date.getTime() + (days * 86400000) );
+    }
+
     return {
-        nextDayDate         : nextDayDate,
+        addDays             : addDays,
         firstOfMonthDate    : firstOfMonthDate,
         firstOfMonthWeekday : firstOfMonthWeekday,
         lastOfMonth         : lastOfMonth,
+        nextDayDate         : nextDayDate,
         yesterday           : yesterday
     };
 
