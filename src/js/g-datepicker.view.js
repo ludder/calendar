@@ -33,7 +33,8 @@ define(['lib/jquery'], function ($) {
         events = {
             daterange_startdate_selected : 'est:daterange_startdate_selected',
             daterange_enddate_selected   : 'est:daterange_enddate_selected',
-            daterange_dates_cleared      : 'est:daterange_dates_cleared'
+            daterange_dates_cleared      : 'est:daterange_dates_cleared',
+            daterange_month_in_view      : 'est:daterange_month_in_view'
         },
 
 
@@ -228,6 +229,43 @@ define(['lib/jquery'], function ($) {
 
             self.setEventSelectDate(self);
             self.setEventSelectMonth(self);
+            self.setEventMonthInView(self);
+        },
+
+        setEventMonthInView : function (self) {
+            // When another month is scrolled into view, throw event
+            var $calendar   = $('.' + classNames.ul);
+            var $months     = $calendar.find('.' + classNames.month);
+            var activeMonth = self.getActiveMonth($months);
+
+            $calendar.on('scroll', function(){
+                var currentMonth = self.getActiveMonth($months);
+                if (currentMonth !== activeMonth) {
+                    activeMonth = currentMonth;
+                    self.publish({
+                        type: events.daterange_month_in_view,
+                        date: activeMonth
+                    });
+                }
+            });
+        },
+
+        getActiveMonth : function ($months) {
+            var i, $month, top,
+                l = $months.length,
+                activeMonth = 0;
+
+            for (i = 0; i < l; i++) {
+                $month = $($months[i].parentNode);
+                top    = $month.position().top;
+                // TODO: how accurate are these measures?
+                if (top > -50 && top < 250) {
+                    activeMonth = $month.attr('data-msdate');
+                    break;
+                }
+            }
+
+            return activeMonth;
         },
 
         /**
@@ -238,7 +276,7 @@ define(['lib/jquery'], function ($) {
             var self = this;
             var $container = this.$container;
             if ($container.find('.' + classNames.firstselecteddate) && $container.find('.' + classNames.lastselecteddate)) {
-                
+
                 self.$selectedStart = $container.find('.' + classNames.firstselecteddate);
                 self.$selectedEnd = $container.find('.' + classNames.lastselecteddate);
                 self.selectInBetweenDays(self);
@@ -295,7 +333,8 @@ define(['lib/jquery'], function ($) {
             $(this).trigger(obj);
 
             // DEBUG
-            // console.log('event thrown: ' + obj);
+            // console.log('event thrown: ', obj.type);
+            // console.log('maand: ', (new Date(parseInt(obj.date, 10))).getMonth());
         },
 
         publishDateSelected : function(eventName, date) {
