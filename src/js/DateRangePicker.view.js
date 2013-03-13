@@ -66,7 +66,7 @@ define(['lib/jquery'], function ($) {
 
         this.months = options.months || defaults.shortMonths;
 
-        this.$container = $(options.selector);
+        this.$container = options.$el;
 
         this.$result = $('#' + options.resultId);
     }
