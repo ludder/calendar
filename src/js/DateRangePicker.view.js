@@ -4,59 +4,59 @@ define(['lib/jquery'], function ($) {
     'use strict';
 
     var defaults = {
-        // TODO - i18n!
-            shortMonths    : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
-            shortWeekDays  : ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
-            journeyOutward : 'Heenreis:',
-            journeyReturn  : 'Terugreis:'
+            // TODO - i18n!
+            shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+            shortWeekDays: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
+            journeyOutward: 'Heenreis:',
+            journeyReturn: 'Terugreis:'
         },
 
         classNames = {
-            wrapper  : 'est-dp-datepicker',
-            ul       : 'est-dp',
-            month    : 'est-dp-month',
-            journey    : 'est-dp-journey',
-            weekDays : 'est-dp-wdays',
+            wrapper: 'est-dp-datepicker',
+            ul: 'est-dp',
+            month: 'est-dp-month',
+            journey: 'est-dp-journey',
+            weekDays: 'est-dp-wdays',
 
-            selectable        : 'est-dp-selectable',
-            disabled          : 'est-dp-disabled',
-            firstweek         : 'est-dp-firstweek',
-            lastdayofmonth    : 'est-dp-lastdayofmonth',
+            selectable: 'est-dp-selectable',
+            disabled: 'est-dp-disabled',
+            firstweek: 'est-dp-firstweek',
+            lastdayofmonth: 'est-dp-lastdayofmonth',
 
-            firstselecteddate : 'est-dp-selected-start',
-            lastselecteddate  : 'est-dp-selected-end',
-            selectedFirst     : 'est-dp-selected-start',
-            selectedLast      : 'est-dp-selected-end',
-            range             : 'est-dp-mo-range'
+            firstselecteddate: 'est-dp-selected-start',
+            lastselecteddate: 'est-dp-selected-end',
+            selectedFirst: 'est-dp-selected-start',
+            selectedLast: 'est-dp-selected-end',
+            range: 'est-dp-mo-range'
         },
 
         events = {
-            daterange_startdate_selected : 'est:daterange_startdate_selected',
-            daterange_enddate_selected   : 'est:daterange_enddate_selected',
-            daterange_dates_cleared      : 'est:daterange_dates_cleared',
-            daterange_month_in_view      : 'est:daterange_month_in_view'
+            daterange_startdate_selected: 'est:daterange_startdate_selected',
+            daterange_enddate_selected: 'est:daterange_enddate_selected',
+            daterange_dates_cleared: 'est:daterange_dates_cleared',
+            daterange_month_in_view: 'est:daterange_month_in_view'
         },
 
 
         templates = {
-            day      : '<li class="${disabled} ${lastdayofmonth} ${firstselecteddate} ${lastselecteddate}"><a data-msdate="${msdate}" href="#" class="${selectable} ${firstweek}">${date}</a></li>',
+            day: '<li class="${disabled} ${lastdayofmonth} ${firstselecteddate} ${lastselecteddate}"><a data-msdate="${msdate}" href="#" class="${selectable} ${firstweek}">${date}</a></li>',
             // day      : '<li class="${lastdayofmonth}"><a data-msdate="${msdate}" href="#" class="${selectable} ${disabled} ${firstweek}">${date}</a></li>',
 
-            month    : '<span class="' + classNames.month + '">${month}</span>',
+            month: '<span class="' + classNames.month + '">${month}</span>',
 
-            weekDays : '<div class="' + classNames.weekDays + '">' +
-                        '<span>' + defaults.shortWeekDays[0] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[1] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[2] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[3] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[4] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[5] + '</span>' +
-                        '<span>' + defaults.shortWeekDays[6] + '</span>' +
-                        '</div>',
+            weekDays: '<div class="' + classNames.weekDays + '">' +
+                '<span>' + defaults.shortWeekDays[0] + '</span>' +
+                '<span>' + defaults.shortWeekDays[1] + '</span>' +
+                '<span>' + defaults.shortWeekDays[2] + '</span>' +
+                '<span>' + defaults.shortWeekDays[3] + '</span>' +
+                '<span>' + defaults.shortWeekDays[4] + '</span>' +
+                '<span>' + defaults.shortWeekDays[5] + '</span>' +
+                '<span>' + defaults.shortWeekDays[6] + '</span>' +
+                '</div>',
 
-            journey : '<div class="' + classNames.journey + '"><strong>' + defaults.journeyOutward + '</strong></div>',
+            journey: '<div class="' + classNames.journey + '"><strong>' + defaults.journeyOutward + '</strong></div>',
 
-            wrapper : '<div class="' + classNames.wrapper + '">${datepicker}</div>'
+            wrapper: '<div class="' + classNames.wrapper + '">${datepicker}</div>'
         },
 
         templReg = /\$\{(\w+)\}/gim;
@@ -73,58 +73,58 @@ define(['lib/jquery'], function ($) {
 
     View.prototype = {
 
-        wrap : function (html) {
+        wrap: function (html) {
             return templates.wrapper.replace(templReg, html);
         },
 
-        renderWeekDays : function () {
+        renderWeekDays: function () {
             return templates.weekDays;
         },
 
-        renderJourney : function () {
+        renderJourney: function () {
             return templates.journey;
         },
 
-        renderMonth : function (monthIndex) {
+        renderMonth: function (monthIndex) {
             return templates.month.replace(templReg, this.months[monthIndex]);
         },
 
-        renderDay : function (day, s) {
+        renderDay: function (day, s) {
             var prop = day[s],
                 tmpDate = (prop && typeof prop.getDate === 'function') && prop.getDate(),
                 month = tmpDate && prop.getMonth();
 
             switch (s) {
-            case 'date':
-                return (tmpDate === 1 ? this.renderMonth(month) + ' ' + tmpDate : tmpDate);
-            case 'msdate':
-                return day.date.getTime();
-            case 'selectable':
-                return (prop && classNames[s] || '');
-            case 'disabled':
-                return (prop && classNames[s] || '');
-            case 'firstweek':
-                return (prop && classNames[s] || '');
-            case 'lastdayofmonth':
-                return (prop && classNames[s] || '');
-            case 'firstselecteddate':
-                return (prop && classNames[s] || '');
-            case 'lastselecteddate':
-                return (prop && classNames[s] || '');
-            default:
-                return prop;
+                case 'date':
+                    return (tmpDate === 1 ? this.renderMonth(month) + ' ' + tmpDate : tmpDate);
+                case 'msdate':
+                    return day.date.getTime();
+                case 'selectable':
+                    return (prop && classNames[s] || '');
+                case 'disabled':
+                    return (prop && classNames[s] || '');
+                case 'firstweek':
+                    return (prop && classNames[s] || '');
+                case 'lastdayofmonth':
+                    return (prop && classNames[s] || '');
+                case 'firstselecteddate':
+                    return (prop && classNames[s] || '');
+                case 'lastselecteddate':
+                    return (prop && classNames[s] || '');
+                default:
+                    return prop;
             }
 
         },
 
-        createRenderDay : function (date) {
+        createRenderDay: function (date) {
             var self = this;
             return function (m, s) {
                 return self.renderDay(date, s);
             };
         },
 
-        render : function (days) {
+        render: function (days) {
             var self = this,
                 html = '',
                 monthArr = days;
@@ -142,7 +142,7 @@ define(['lib/jquery'], function ($) {
             // monthArr.forEach(function (date, index) {
             //     html += templates.day.replace(templReg, self.createRenderDay(date));
             // });
-            for (var i=0; i<monthArr.length; i++) {
+            for (var i = 0; i < monthArr.length; i++) {
                 html += templates.day.replace(templReg, self.createRenderDay(monthArr[i], i));
             }
 
@@ -156,7 +156,7 @@ define(['lib/jquery'], function ($) {
 
         },
 
-        selectStartDate : function(self, target) {
+        selectStartDate: function (self, target) {
             var $nexts;
             var $parentNode = $(target.parentNode);
 
@@ -173,7 +173,7 @@ define(['lib/jquery'], function ($) {
 
         },
 
-        disableDaysBeforeStartDate : function (self) {
+        disableDaysBeforeStartDate: function (self) {
             self.$selectedStart.prevAll()
                 .addClass(classNames.disabled)
                 .find('a')
@@ -181,7 +181,7 @@ define(['lib/jquery'], function ($) {
                 .off('.calendarhover');
         },
 
-        selectEndDate : function(self, target) {
+        selectEndDate: function (self, target) {
             if (!self.$selectedEnd) {
                 // End date selected
                 var $sibs;
@@ -199,32 +199,32 @@ define(['lib/jquery'], function ($) {
             self.publishEndDateSelected(target);
         },
 
-        selectInBetweenDays : function(self) {
+        selectInBetweenDays: function (self) {
             $(self.$selectedEnd).prevUntil(self.$selectedStart).addClass(classNames.range);
         },
 
-        clearSelectedDates : function(self, parent) {
+        clearSelectedDates: function (self, parent) {
             self.$selectedStart = null;
-            self.$selectedEnd   = null;
+            self.$selectedEnd = null;
 
             var classnames = classNames.range + ' ' + classNames.selectedFirst + ' ' + classNames.selectedLast;
             $(parent).siblings().removeClass(classnames);
         },
 
-        initEvents : function () {
+        initEvents: function () {
             var self = this;
 
             self.setEventSelectDate(self);
             self.setEventMonthInView(self);
         },
 
-        setEventMonthInView : function (self) {
+        setEventMonthInView: function (self) {
             // Trhow event when another month is scrolled into view
-            var $calendar   = $('.' + classNames.ul);
-            var $months     = $calendar.find('.' + classNames.month);
+            var $calendar = $('.' + classNames.ul);
+            var $months = $calendar.find('.' + classNames.month);
             var activeMonth = self.getActiveMonth($months);
 
-            $calendar.on('scroll', function(){
+            $calendar.on('scroll', function () {
                 var currentMonth = self.getActiveMonth($months);
                 if (currentMonth !== activeMonth) {
                     activeMonth = currentMonth;
@@ -236,14 +236,14 @@ define(['lib/jquery'], function ($) {
             });
         },
 
-        getActiveMonth : function ($months) {
+        getActiveMonth: function ($months) {
             var i, $month, top,
                 l = $months.length,
                 activeMonth = 0;
 
             for (i = 0; i < l; i++) {
                 $month = $($months[i].parentNode);
-                top    = $month.position().top;
+                top = $month.position().top;
                 // TODO: how accurate are these measures?
                 if (top > -50 && top < 250) {
                     activeMonth = $month.attr('data-msdate');
@@ -258,7 +258,7 @@ define(['lib/jquery'], function ($) {
          * Select start date, end date and in between days when view is generated with known start and end date
          * @return {[type]} [description]
          */
-        selectDays : function() {
+        selectDays: function () {
             var self = this;
             var $container = this.$container;
             if ($container.find('.' + classNames.firstselecteddate) && $container.find('.' + classNames.lastselecteddate)) {
@@ -268,12 +268,14 @@ define(['lib/jquery'], function ($) {
                 self.selectInBetweenDays(self);
 
                 // Scroll to first selected day
-                var newTop = self.$selectedStart.position().top -20;
-                self.$container.find('.' + classNames.ul).animate({'scrollTop': newTop}, 800);
+                if (self.$selectedStart && self.$selectedStart.length) {
+                    var newTop = self.$selectedStart.position().top - 20;
+                    self.$container.find('.' + classNames.ul).animate({'scrollTop': newTop}, 800);
+                }
             }
         },
 
-        setEventSelectDate : function(self) {
+        setEventSelectDate: function (self) {
             this.$datepicker.on('click.calendarclick', '.' + classNames.selectable, function (event) {
 
                 event.preventDefault();
@@ -295,7 +297,7 @@ define(['lib/jquery'], function ($) {
             });
         },
 
-        handleHoverEvent: function(eventType, self, parentNode) {
+        handleHoverEvent: function (eventType, self, parentNode) {
             var $prev = $(parentNode).prevUntil(self.$selectedStart),
                 len = $prev.length;
 
@@ -315,7 +317,7 @@ define(['lib/jquery'], function ($) {
             }
         },
 
-        publish : function(obj) {
+        publish: function (obj) {
             $(this).trigger(obj);
 
             // DEBUG
@@ -323,7 +325,7 @@ define(['lib/jquery'], function ($) {
             // console.log('maand: ', (new Date(parseInt(obj.date, 10))).getMonth());
         },
 
-        publishDateSelected : function(eventName, date) {
+        publishDateSelected: function (eventName, date) {
             var obj = {
                 type: eventName,
                 date: date
@@ -332,7 +334,7 @@ define(['lib/jquery'], function ($) {
             this.publish(obj);
         },
 
-        publishDatesCleared : function() {
+        publishDatesCleared: function () {
             var obj = {
                 type: events.daterange_dates_cleared
             };
@@ -340,21 +342,21 @@ define(['lib/jquery'], function ($) {
             this.publish(obj);
         },
 
-        publishStartDateSelected : function(target) {
+        publishStartDateSelected: function (target) {
             var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
             this.showJourney(date, defaults.journeyOutward);
             this.publishDateSelected(events.daterange_startdate_selected, date);
         },
 
-        publishEndDateSelected : function(target) {
+        publishEndDateSelected: function (target) {
             var date = new Date(parseInt(target.getAttribute('data-msdate'), 10));
             this.showJourney(date, defaults.journeyReturn);
             this.publishDateSelected(events.daterange_enddate_selected, date);
         },
 
-        showJourney : function(date, journeyType) {
+        showJourney: function (date, journeyType) {
             var text = '<strong>' + journeyType + '</strong> ' + defaults.shortWeekDays[date.getDay()] +
-                        ' ' + date.getDate() + ' ' + defaults.shortMonths[date.getMonth()];
+                ' ' + date.getDate() + ' ' + defaults.shortMonths[date.getMonth()];
             $('.' + classNames.journey).html(text);
         }
 
