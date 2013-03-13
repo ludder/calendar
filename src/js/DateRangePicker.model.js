@@ -199,13 +199,14 @@ define([
 
         getMonthsInRange : function(startdate, days) {
             // Get number of months in day range
-            var curYear        = startdate.getFullYear(),
+            var curMonth       = startdate.getMonth(),
+                curYear        = startdate.getFullYear(),
                 lastdayinrange = addDays(startdate, days),
                 lastMonth      = lastdayinrange.getMonth(),
                 lastYear       = lastdayinrange.getFullYear();
 
             lastMonth     += (lastYear - curYear) * 12;
-            return lastMonth;
+            return (lastMonth - curMonth + 1); // Also include last month itself
         },
 
         addMonthsToDate : function (startdate, months) {
