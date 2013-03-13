@@ -170,8 +170,17 @@ define(['lib/jquery'], function ($) {
                 self.handleHoverEvent(e.type, self, this.parentNode);
             });
 
+            self.disableDaysBeforeStartDate(self);
             self.publishStartDateSelected(target);
 
+        },
+
+        disableDaysBeforeStartDate : function (self) {
+            self.$selectedStart.prevAll()
+                .addClass(classNames.disabled)
+                .find('a')
+                .removeClass(classNames.selectable)
+                .off('.calendarhover');
         },
 
         selectEndDate : function(self, target) {
@@ -267,7 +276,7 @@ define(['lib/jquery'], function ($) {
         },
 
         setEventSelectDate : function(self) {
-            this.$datepicker.on('click', '.' + classNames.selectable, function (event) {
+            this.$datepicker.on('click.calendarclick', '.' + classNames.selectable, function (event) {
 
                 event.preventDefault();
 
