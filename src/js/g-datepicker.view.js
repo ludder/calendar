@@ -192,26 +192,6 @@ define(['lib/jquery'], function ($) {
             self.publishEndDateSelected(target);
         },
 
-        setEventSelectMonth : function(self) {
-            self.$datepicker.on('click', '.' + classNames.month, function (e) {
-
-                var firstDay, lastDay;
-                e.stopPropagation();
-
-                firstDay = e.target.parentNode;
-                lastDay = $(firstDay.parentNode).nextAll('.' + classNames.lastdayofmonth + ':first').find('a').get(0);
-
-                // Clear selected dates
-                self.clearSelectedDates(self, firstDay.parentNode);
-
-                // Select first and last day of month
-                self.selectStartDate(self, firstDay);
-                self.selectEndDate(self, lastDay);
-
-                self.selectInBetweenDays(self);
-            });
-        },
-
         selectInBetweenDays : function(self) {
             $(self.$selectedEnd).prevUntil(self.$selectedStart).addClass(classNames.range);
         },
@@ -228,12 +208,11 @@ define(['lib/jquery'], function ($) {
             var self = this;
 
             self.setEventSelectDate(self);
-            self.setEventSelectMonth(self);
             self.setEventMonthInView(self);
         },
 
         setEventMonthInView : function (self) {
-            // When another month is scrolled into view, throw event
+            // Trhow event when another month is scrolled into view
             var $calendar   = $('.' + classNames.ul);
             var $months     = $calendar.find('.' + classNames.month);
             var activeMonth = self.getActiveMonth($months);
